@@ -9,17 +9,18 @@
       div
         img src="/assets/ups1.jpg"
 
-
-
-
 .ym-grid
   .ym-g62.ym-gl
-    /.ym-gbox.demo.news 
+    /.ym-gbox
     table
       - @news.each do |news|
         tr
           td = news.title
-          td = news.created_at
+          td = news.created_at && news.created_at.to_date
   .ym-g38.ym-gr
-    .ym-gbox.demo.order 跟踪订单
+    = form_tag bills_search_path, :class => "ym-form" do
+      .ym-fbox-text
+        = label_tag "运件查询"
+        = text_area_tag "intl_no", nil, :placeholder => "请输入运单号"
+        = submit_tag '提交'
 

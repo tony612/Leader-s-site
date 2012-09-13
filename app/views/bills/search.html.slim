@@ -1,0 +1,23 @@
+table
+  thead
+    tr
+      th 我司单号
+      th 国际件运单号
+      th 转单号
+      th 目的地
+      th 数量
+      th 当地时间
+      th 最新状态
+      th 官网查看
+  tbody
+    /- @bills.each do |bill|
+    tr
+      td = @bill.our_no
+      td = @bill.intl_no
+      td = @bill.tracking_no
+      td = @bill.goal
+      td = @bill.number
+      td = @bill.local_time
+      td = @bill.new_status
+      td = link_to '前往查看', @bill.url, :target => "_blank"
+

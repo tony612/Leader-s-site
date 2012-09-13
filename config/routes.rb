@@ -1,4 +1,6 @@
 Leader::Application.routes.draw do
+  resources :bills
+  post "bills/search"
   resources :news
 
   get "static_pages/home"

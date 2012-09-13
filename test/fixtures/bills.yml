@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  our_no: MyString
+  intl_no: MyString
+  tracking_no: MyString
+  goal: MyString
+  number: 1
+  local_time: 2012-09-13 09:40:10
+  new_status: MyString
+  url: MyString
+
+two:
+  our_no: MyString
+  intl_no: MyString
+  tracking_no: MyString
+  goal: MyString
+  number: 1
+  local_time: 2012-09-13 09:40:10
+  new_status: MyString
+  url: MyString
