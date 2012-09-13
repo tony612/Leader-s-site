@@ -1,0 +1,25 @@
+.ym-grid
+  .ym-gbox
+  #slides
+    .slides_container
+      div
+        img src="/assets/fedex1.jpg"
+      div
+        img src="/assets/dhl1.jpg"
+      div
+        img src="/assets/ups1.jpg"
+
+
+
+
+.ym-grid
+  .ym-g62.ym-gl
+    /.ym-gbox.demo.news 
+    table
+      - @news.each do |news|
+        tr
+          td = news.title
+          td = news.created_at
+  .ym-g38.ym-gr
+    .ym-gbox.demo.order 跟踪订单
+

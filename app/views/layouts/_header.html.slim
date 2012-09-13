@@ -1,0 +1,15 @@
+header
+  .ym-gbox
+    h1 Leader
+  .ym-gbox
+    nav.ym-hlist
+      ul
+        li.active = link_to root_path do
+          strong 
+            b 首页
+        li = link_to "产品", static_pages_products_path
+        li = link_to "新闻中心", news_index_path
+        li = link_to "关于我们", static_pages_about_path
+      ul.pull-right
+        li: a[href="#"] 登录
+        li: a[href="#"] 注册

@@ -1,0 +1,73 @@
+// Place all the styles related to the StaticPages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+a:hover, a:focus {
+  background-color: transparent;
+}
+
+.demo {
+  text-align:center;
+  background: #EEE;
+  border: 1px #CCC solid;
+  padding: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+
+}
+
+.ym-grid {
+  margin-top: 21px;
+}
+
+.demo.slide {
+  height: 270px;
+}
+
+.demo.order, .demo.news{
+  height:160px;
+}
+
+.slides_container {
+  width: 900px;
+  height: 270px;
+  div {
+    width:900px;
+    height:270px;
+    display:block;
+  }
+
+  img {
+    width: 900px;
+    height: 270px;
+  }
+}
+
+#slides {
+  a:link, a:visited {
+    color: #333;
+  }
+  .pagination {
+    list-style: none;
+    margin: 6px 0 0;
+    float: right;
+    li {
+      float: left;
+      margin: 0 1px;
+      a {
+        display: block;
+        width: 13px;
+        height: 0;
+        padding-top: 13px;
+        background-image: url(/assets/pagination.png);
+        float: left;
+        overflow: hidden;
+
+        &:hover {
+          background-position: 0 -26px;
+        }
+      }
+    }
+  }
+
+}

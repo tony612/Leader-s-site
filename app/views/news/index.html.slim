@@ -1,0 +1,14 @@
+.jquery_tabs
+  - @news.each do |news|
+    h4 = news['_id']
+    .tab-content
+      table
+        tbody
+          - news['value'].values[0].each do |one|
+            tr
+              td = link_to one['news']['title'], news_path(one['news']['_id'])
+              td = one['news']['created_at'] && one['news']['created_at'].to_date.to_formatted_s(:db)
+
+br
+
+= link_to 'New News', new_news_path

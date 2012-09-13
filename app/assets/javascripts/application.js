@@ -13,3 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+
+$('nav.ym-hlist li').live('click', function(){
+  $('nav.ym-hlist li').removeClass('active');
+  $(this).addClass('active');
+});

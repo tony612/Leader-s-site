@@ -1,0 +1,10 @@
+= content_for :content do
+  .ym-grid
+    .ym-g25.ym-gl
+      .ym-gbox
+        = content_for?(:menu_content) ? yield(:menu_content) : yield
+    .ym-g75.ym-gr
+      .ym-gbox
+        = content_for?(:main_content) ? yield(:main_content) : yield
+  
+=render :template => 'layouts/application'

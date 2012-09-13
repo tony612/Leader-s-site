@@ -1,0 +1,23 @@
+/**
+ * application-all.css
+ *
+ * = require_self
+ * =require_tree ./all
+ *
+ *
+ */
+
+.ym-wrapper {
+  width: 960px;
+  margin: 0 auto;
+}
+
+.ym-wbox {
+  padding: 10px;
+}
+
+.ym-hlist ul.pull-right {
+  float: right;
+}
+
+
