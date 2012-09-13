@@ -1,13 +1,13 @@
 body {
   background-color: #fff;
   color: #333;
-  font-family: verdana, arial, helvetica, sans-serif;
+  font-family:"微软雅黑", Pmingliu, arial, helvetica ,verdana, sans-serif;
   font-size: 13px;
   line-height: 18px;
 }
 
 p, ol, ul, td {
-  font-family: verdana, arial, helvetica, sans-serif;
+  font-family:"微软雅黑", Pmingliu, arial, helvetica, verdana, sans-serif;
   font-size: 13px;
   line-height: 18px;
 }
@@ -19,13 +19,10 @@ pre {
 }
 
 a {
-  color: #000;
-  &:visited {
-    color: #666;
-  }
+  color: #0088cc;
+  text-decoration: none;
   &:hover {
-    color: #fff;
-    background-color: #000;
+    color: #005580;
   }
 }
 
@@ -65,5 +62,20 @@ div {
   ul li {
     font-size: 12px;
     list-style: square;
+  }
+}
+
+.box {
+  padding: 0.5em;
+}
+
+#navbar {
+  span {
+    font-size: 15px;
+
+    &.active {
+      color:white;
+      font-weight: bold;
+    }
   }
 }

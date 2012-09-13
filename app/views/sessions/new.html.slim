@@ -1,0 +1,19 @@
+- provide :title, "登录"
+
+h3 登录
+.ym-grid
+  .ym-g38.ym-gl
+    .ym-form
+      - if flash[:alert]
+        .ym-error
+          p.ym-message = flash[:alert]
+
+      = form_for :session, url: login_path, :html => {:class => "ym-full"} do |f|
+        .ym-fbox-text
+          = f.label :username, "用户名"
+          = f.text_field :username
+        .ym-fbox-text
+          = f.label :password, "密码"
+          = f.password_field :password
+        .ym-fbox-button
+          = f.submit "登入", :class => "ym-button"
