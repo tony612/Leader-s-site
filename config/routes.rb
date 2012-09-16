@@ -1,4 +1,11 @@
 Leader::Application.routes.draw do
+  resources :quoted_prices do
+    collection do
+      post 'download'
+    end
+
+    resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
+  end
   controller :sessions do
     get 'login' => :new
     post 'login' => :create
@@ -7,8 +14,12 @@ Leader::Application.routes.draw do
 
   resources :users
 
-  resources :bills
-  post "bills/search"
+  resources :bills do
+    collection do
+      post 'search'
+    end
+  end
+
   resources :news
 
   get "static_pages/home"

@@ -1,0 +1,19 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @quoted_price.name
+p
+  strong Transport:
+  = @quoted_price.transport
+p
+  strong Currency:
+  = @quoted_price.currency
+p
+  strong Date active:
+  = @quoted_price.date_active
+
+
+= link_to 'Edit', edit_quoted_price_path(@quoted_price)
+'|
+= link_to 'Back', quoted_prices_path

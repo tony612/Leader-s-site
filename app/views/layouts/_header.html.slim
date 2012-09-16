@@ -16,6 +16,8 @@ header
           span 运单
         li = link_to users_path do
           span 用户
+        li = link_to quoted_prices_path do
+          span 报价表
       ul.pull-right
         - if signed_in?
           li = link_to "登出", logout_path, :method => :delete

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  zone: 1
+  countrys_en: MyString
+  countrys_cn: MyString
+  name: MyString
+  transport: MyString
+  no: MyString
+
+two:
+  zone: 1
+  countrys_en: MyString
+  countrys_cn: MyString
+  name: MyString
+  transport: MyString
+  no: MyString

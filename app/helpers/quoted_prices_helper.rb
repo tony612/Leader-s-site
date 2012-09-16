@@ -1,0 +1,2 @@
+module QuotedPricesHelper
+end
