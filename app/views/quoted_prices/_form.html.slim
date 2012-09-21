@@ -20,5 +20,21 @@
     = f.date_select :date_active
   .ym-fbox-select
     = file_field_tag :attachment
-
+  .ym-fbox-select
+    = label_tag 'prices_rows_range', "报价表行数范围(用逗号隔开, 如：3,18)"
+    = text_field_tag 'prices_rows_range'
+  .ym-fbox-select
+    = label_tag 'prices_cols_range', "报价表列数范围(用逗号隔开，如：A,P)"
+    = text_field_tag 'prices_cols_range'
+  .ym-fbox-select
+    = label_tag 'kind_of_prices', "报价表种类"
+    = select_tag 'kind_of_prices', "<option>1</option><option>2</option><option>3</option>".html_safe
+  .ym-fbox-select
+    = label_tag 'area_rows_range', "分区表行数范围(用逗号隔开, 如：23,34)"
+    = text_field_tag 'area_rows_range'
+  .ym-fbox-select
+    = label_tag 'area_rows_range', "分区表列数范围(用逗号隔开，如：A,P)"
+    = text_field_tag 'area_cols_range'
+  /.ym-fbox-select
+    = number_field_tag "报价开始行数"
   .ym-fbox-button = f.submit 'Save'

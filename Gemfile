@@ -9,7 +9,9 @@ gem 'mongoid', '~> 3.0.0'
 gem 'slim-rails'
 
 gem 'thin'
-
+gem 'spreadsheet', '~> 0.7.3'
+gem 'hoe', '~> 2.13'
+gem 'rdoc', '~> 3.10'
 gem 'carrierwave'
 gem 'mime-types'
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'

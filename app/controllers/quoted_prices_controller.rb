@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+require 'spreadsheet'
+
 class QuotedPricesController < ApplicationController
+
   # GET /quoted_prices
   # GET /quoted_prices.json
   def index
@@ -48,6 +51,22 @@ class QuotedPricesController < ApplicationController
   def edit
     @quoted_price = QuotedPrice.find(params[:id])
   end
+  
+  def handle_table
+    prices_rows_begin, prices_rows_end = *(params[:prices_rows_range].split(%r{[.,\s]\s*}))
+    prices_cols_begin, prices_cols_end = *(params[:prices_cols_range].split(%r{[.,\s]\s*}))
+    area_rows_begin, area_rows_end = *(params[:area_rows_range].split(%r{[.,\s]\s*}))
+    area_cols_begin, area_cols_end = *(params[:area_cols_range].split(%r{[.,\s]\s*}))
+    p [prices_rows_begin, prices_rows_end, prices_cols_begin, prices_cols_end, area_rows_begin, area_rows_end, area_cols_begin, area_cols_end]
+    excel_path = "#{Rails.root}/public/uploads/attachment/attachment/#{@quoted_price.attachment._id}/#{@quoted_price.attachment.attachment_filename}"
+    Spreadsheet.client_encoding = 'UTF-8'
+    quoted_prices_table = Spreadsheet.open excel_path
+    sheet = quoted_prices_table.worksheet 0
+    row = sheet.row(prices_rows_begin.to_i)
+    row.each do |cell|
+      p cell
+    end
+  end
 
   # POST /quoted_prices
   # POST /quoted_prices.json
@@ -59,7 +78,8 @@ class QuotedPricesController < ApplicationController
     respond_to do |format|
       if @quoted_price.save
         @quoted_price.create_attachment(:attachment => params[:attachment]) if params[:attachment]
-        flash[:success] = "恭喜，成功创建报价表——#{@quoted_price.name}"
+        handle_table()     
+        flash[:success] = "恭喜，成功上传报价表——#{@quoted_price.name}"
 
         format.html { redirect_to @quoted_price }
         format.json { render json: @quoted_price, status: :created, location: @quoted_price }
