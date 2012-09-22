@@ -53,18 +53,54 @@ class QuotedPricesController < ApplicationController
   end
   
   def handle_table
+    kind_of_prices = params[:kind_of_prices]
     prices_rows_begin, prices_rows_end = *(params[:prices_rows_range].split(%r{[.,\s]\s*}))
     prices_cols_begin, prices_cols_end = *(params[:prices_cols_range].split(%r{[.,\s]\s*}))
     area_rows_begin, area_rows_end = *(params[:area_rows_range].split(%r{[.,\s]\s*}))
     area_cols_begin, area_cols_end = *(params[:area_cols_range].split(%r{[.,\s]\s*}))
-    p [prices_rows_begin, prices_rows_end, prices_cols_begin, prices_cols_end, area_rows_begin, area_rows_end, area_cols_begin, area_cols_end]
+    #p [prices_rows_begin, prices_rows_end, prices_cols_begin, prices_cols_end, area_rows_begin, area_rows_end, area_cols_begin, area_cols_end]
     excel_path = "#{Rails.root}/public/uploads/attachment/attachment/#{@quoted_price.attachment._id}/#{@quoted_price.attachment.attachment_filename}"
     Spreadsheet.client_encoding = 'UTF-8'
     quoted_prices_table = Spreadsheet.open excel_path
-    sheet = quoted_prices_table.worksheet 0
-    row = sheet.row(prices_rows_begin.to_i)
-    row.each do |cell|
-      p cell
+    sheet = quoted_prices_table.worksheet 0 
+    rows_arr = [prices_rows_begin, prices_rows_end, area_rows_begin, area_rows_end].map(&:to_i).map(&:pred) 
+    cols_arr = [prices_cols_begin, prices_cols_end, area_cols_begin, area_cols_end].map{|l| letter_to_int(l)}
+    #p rows_arr
+    #p cols_arr
+    case kind_of_prices
+    when 1
+      ((cols_arr[0]+3)..cols_arr[1]).each do |col_index|
+        region = RegionDetail.new
+        region.zone = (sheet.cell rows_arr[0], col_index)[2..-1].to_i
+        region.contrys_en = (sheet.cell (rows_arr[2] + region.zone), (cols_arr[2] + 1))
+        region.contrys_cn = (sheet.cell (rows_arr[2] + region.zone), (cols_arr[2] + 2))
+        p "region ============#{region}" 
+        region.no = current().to_formatted_s(:number)
+        ((rows_arr[0] + 1)..rows_arr[1]).each do |row_index|
+          prices_detail = PricesDetail.new(type: sheet.cell(row_index, cols_arr[0]), 
+                                           cal_type: kind_of_prices, price: sheet.cell(row_index, col_index))
+          prices_detail[:by_weight] = sheet.cell(row_index, cols_arr[0] + 1)
+          prices_detail[:single_weight] = sheet.cell(row_index, cols_arr[0] + 2)
+          region.prices_details << prices_detail
+          p "prices detail ===============" + prices_details
+        end
+      end
+    when 2..3
+      ((rows_arr[0]+1)..rows_arr[1]).each do |row_index|
+        row_value = sheet.row row_index
+        region.zone = row_value[0]
+        region.countrys_en = (sheet.cell (rows_arr[2] + row_value[0]), (cols_arr[2] + 1))
+        region.countrys_cn = (sheet.cell (rows_arr[2] + row_value[0]), (cols_arr[2] + 2))
+        region.no = current().to_formatted_s(:number)
+        p "region ===================#{region}"
+        ((cols_arr[0]+5)..cols_arr[1]).each do |col_index|
+          prices_detail = PricesDetail.new(type: "WPX", cal_type: kind_of_prices, price: sheet.cell(row_value[col_index - cols_arr[0]]))
+          prices_detail[:country], prices_detail[:area] = *row_value[1..2]
+          prices_detail[:head_weight], prices_detail[:continue_weight] = *row_value[3..4] if kind_of_prices is 2
+          region.prices_details << prices_detail
+          p "region ============================#{region}"
+        end
+      end
     end
   end
 
@@ -120,4 +156,19 @@ class QuotedPricesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+
+  def letter_to_int(arr)
+    arr = arr.upcase
+    value = 0
+    time = arr.length - 1
+    arr.each_byte do |c|
+      value += (c - 64) * 26**time
+      time -= 1
+    end
+    value - 1
+  end 
+
+
 end

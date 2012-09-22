@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  type: 
+  cal_type: 1
+  price: MyString
+
+two:
+  type: 
+  cal_type: 1
+  price: MyString
