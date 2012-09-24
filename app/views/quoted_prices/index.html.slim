@@ -13,12 +13,11 @@ table
 
   - @quoted_prices.each do |quoted_price|
     tr
-      td = quoted_price.name
+      td = link_to quoted_price.name, quoted_price
       td = quoted_price.transport
       td = quoted_price.currency
       td = quoted_price.date_active.to_date
       td = link_to '下载Excel文件', download_quoted_prices_path(:quoted_price => quoted_price), :method => :post
-      td = link_to 'Show', quoted_price
       td = link_to 'Edit', edit_quoted_price_path(quoted_price)
       td = link_to 'Destroy', quoted_price, :confirm => 'Are you sure?', :method => :delete
       

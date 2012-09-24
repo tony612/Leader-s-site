@@ -6,8 +6,9 @@ class QuotedPrice
   field :currency, type: String
   field :transport, type: String
   field :date_active, type: DateTime
+  field :kind_prices, type: String
 
   has_many :region_details
-
+  embeds_many :weight_details
   embeds_one :attachment, as: :attachmentable, class_name: 'Attachment', cascade_callbacks: true 
 end

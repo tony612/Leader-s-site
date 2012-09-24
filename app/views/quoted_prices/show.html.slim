@@ -1,19 +1,23 @@
-p#notice = notice
+h1 报价表详情
 
-p
-  strong Name:
-  = @quoted_price.name
-p
-  strong Transport:
-  = @quoted_price.transport
-p
-  strong Currency:
-  = @quoted_price.currency
-p
-  strong Date active:
-  = @quoted_price.date_active
+table.bordertable
+  thead
+    tr
+      th = "名称：#{@quoted_price.name}"
+      th = "运输方式: #{@quoted_price.transport}"
+      th = "分区表: "
+      th = "币种: #{@quoted_price.currency}"
+      th = "生效日期: #{@quoted_price.date_active.to_date}"
 
-
+table.bordertable
+  thead
+    tr
+      - @prices_table[0].each do |head|
+        th = head
+    - @prices_table[1..-1].each do |row|
+      tr
+        - row.each do |cell|
+          td = cell
 = link_to 'Edit', edit_quoted_price_path(@quoted_price)
 '|
 = link_to 'Back', quoted_prices_path
