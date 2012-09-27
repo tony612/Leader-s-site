@@ -1,4 +1,4 @@
-= form_for @user, :html => {:class => "ym-form ym-full ym-g38"} do |f|
+= form_for [:admin, @user], :html => {:class => "ym-form ym-full ym-g38"} do |f|
   - if @user.errors.any?
     #error_explanation
       h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
@@ -16,7 +16,7 @@
     = f.label :email, "邮箱"
     = f.text_field :email
   .ym-fbox-text
-    = f.label :address, "邮箱"
+    = f.label :address, "地址"
     = f.text_field :address
   .ym-fbox-text
     = f.label :password, '密码'

@@ -18,6 +18,5 @@ table.bordertable
       tr
         - row.each do |cell|
           td = cell
-= link_to 'Edit', edit_quoted_price_path(@quoted_price)
-'|
-= link_to 'Back', quoted_prices_path
+
+= link_to 'Back', admin_quoted_prices_path

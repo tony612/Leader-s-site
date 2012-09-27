@@ -1,0 +1,35 @@
+- provide :title, "用户"
+
+h1 用户列表
+
+table
+  tr
+    th 用户名
+    th 姓名
+    th 邮箱
+    th 地址
+    th 超级管理员
+    th 运单管理
+    th
+    th
+    th
+
+  - @users.each do |user|
+    tr
+      td = user.username
+      td = user.name
+      td = user.email
+      td = user.address
+      td = user.admin
+      td = user.bill_admin
+      td = link_to 'Show', user
+      td = link_to edit_admin_user_path(user) do
+        button.ym-button.ym-edit 编辑
+      td = link_to admin_user_path(user), :confirm => 'Are you sure?', :method => :delete do
+        button.ym-button.ymdelete 删除
+
+br
+
+= link_to new_admin_user_path do
+  button.ym-button.ym-add 新建用户
+  

@@ -6,11 +6,18 @@
     .tab-content
       table
         tbody
-          - news['value'].values[0].each do |one|
+          - if news['value'].values[0].class == Hash
             tr
-              td = link_to one['news']['title'], news_path(one['news']['_id'])
-              td = one['news']['created_at'] && one['news']['created_at'].to_date.to_formatted_s(:db)
+              td = link_to news['value'].values[0]['title'], news_path(news['value'].values[0]['_id'])
+              td = news['value'].values[0]['created_at'] && news['value'].values[0]['created_at'].to_date.to_formatted_s(:db)
+          - else 
+            -  news['value'].values[0].each do |one|
+              tr
+                td = link_to one["news"]["title"], news_path(one['news']['_id'])
+                td = one['news']['created_at'] && one['news']['created_at'].to_date.to_formatted_s(:db)
 
 br
 
-= link_to 'New News', new_news_path
+= link_to new_admin_news_path do
+  button.ym-button.ym-add 新建新闻
+  

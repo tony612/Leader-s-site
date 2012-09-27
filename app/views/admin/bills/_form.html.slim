@@ -1,0 +1,27 @@
+= form_for [:admin, @bill], :html => {:class => "ym-form ym-full ym-g38"} do |f|
+
+  .ym-fbox-text
+    = f.label :our_no, "我司单号"
+    = f.text_field :our_no
+  .ym-fbox-text
+    = f.label :intl_no, "国际件运单号"
+    = f.text_field :intl_no
+  .ym-fbox-text
+    = f.label :tracking_no, "转单号"
+    = f.text_field :tracking_no
+  .ym-fbox-text
+    = f.label :goal, "目的地"
+    = f.text_field :goal
+  .ym-fbox-text
+    = f.label :number, "数量"
+    = f.number_field :number
+  .ym-fbox-select
+    = f.label :local_time, "当地时间"
+    = f.date_select :local_time
+  .ym-fbox-text
+    = f.label :new_status, "最新状态"
+    = f.text_field :new_status
+  .ym-fbox-text
+    = f.label :url, "官网链接"
+    = f.text_field :url
+  .ym-fbox-button = f.submit 'Save'

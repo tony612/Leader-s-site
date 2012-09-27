@@ -1,0 +1,12 @@
+= form_for [:admin, @news] do |f|
+
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :content
+    = f.text_area :content
+  .field
+    = f.label :category
+    = f.text_field :category
+  .actions = f.submit 'Save'

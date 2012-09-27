@@ -23,6 +23,7 @@ class News
       }
     }
     news = News.map_reduce(map, reduce).out(inline: 1)
+    #news.each {|new| p new["value"].values[0]}
     return news
   end
 end

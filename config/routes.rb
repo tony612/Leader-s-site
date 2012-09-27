@@ -1,12 +1,13 @@
 Leader::Application.routes.draw do
   resources :quoted_prices do
     collection do
-      post 'download'
       get 'search'
       post 'search'
     end
-       
-    resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
+
+    member do
+      get 'show'
+    end
   end
   controller :sessions do
     get 'login' => :new
@@ -14,7 +15,7 @@ Leader::Application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  resources :users
+  resources :users, :only => [:show]
 
   resources :bills do
     collection do
@@ -22,11 +23,27 @@ Leader::Application.routes.draw do
     end
   end
 
-  resources :news
+  resources :news, :only => [:show, :index]
 
   get "static_pages/home"
   get "static_pages/products"
   get "static_pages/about"
+  
+  namespace :admin do
+    resources :bills, :except => :show
+    resources :news, :except => [:show, :index]
+    resources :users, :except => [:show]
+    resources :quoted_prices do
+    collection do
+      post 'download'
+      get 'search'
+      post 'search'
+    end
+       
+    resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
+  end
+
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -66,13 +83,6 @@ Leader::Application.routes.draw do
   #     resources :sales do
   #       get 'recent', :on => :collection
   #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
   #   end
 
   # You can have the root of your site routed with "root"

@@ -1,10 +1,4 @@
-= form_for @quoted_price, :html => {:class => "ym-form ym-full ym-g38", :multipart => true} do |f|
-  - if @quoted_price.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@quoted_price.errors.count, "error")} prohibited this quoted_price from being saved:"
-      ul
-        - @quoted_price.errors.full_messages.each do |message|
-          li = message
+= form_for [:admin, @quoted_price], :html => {:class => "ym-form ym-full ym-g38", :multipart => true} do |f|
 
   .ym-fbox-text
     = f.label :name

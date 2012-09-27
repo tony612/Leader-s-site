@@ -1,0 +1,40 @@
+-provide :title, "运单"
+
+h1 运单列表
+
+table
+  tr
+    th 我司单号
+    th 国际件运单号
+    th 转单号
+    th 目的地
+    th 数量
+    th 当地时间
+    th 最新状态
+    th 官网查看
+    th
+    th
+    th
+
+  - @bills.each do |bill|
+    tr
+      td = bill.our_no
+      td = bill.intl_no
+      td = bill.tracking_no
+      td = bill.goal
+      td = bill.number
+      td = bill.local_time.to_time.to_s(:db) if bill.local_time
+      td = bill.new_status
+      td = link_to '前往查看', bill.url, :target => "_blank"
+      td 
+        = link_to edit_admin_bill_path(bill) do
+          button.ym-button.ym-edit 编辑
+      td 
+        = link_to admin_bill_path(bill), :confirm => 'Are you sure?', :method => :delete do
+          button.ym-button.ym-delete 删除
+
+
+br
+
+= link_to new_admin_bill_path, :target => "_blank" do
+  button.ym-button.ym-add 新建运单

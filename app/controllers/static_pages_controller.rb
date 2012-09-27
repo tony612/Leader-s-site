@@ -1,4 +1,6 @@
 class StaticPagesController < ApplicationController
+  skip_before_filter :signed_in_user
+
   layout "single", :only => [:about]
 
   def home

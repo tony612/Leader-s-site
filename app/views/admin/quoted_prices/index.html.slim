@@ -1,0 +1,31 @@
+- provide :title, "报价表"
+
+h1 报价表列表
+
+table
+  tr
+    th 报价表名称
+    th 运输方式
+    th 币种
+    th 生效日期
+    th 附件
+    th
+    th
+    th
+
+  - @quoted_prices.each do |quoted_price|
+    tr
+      td = link_to quoted_price.name, quoted_price
+      td = quoted_price.transport
+      td = quoted_price.currency
+      td = quoted_price.date_active.to_date
+      td = link_to '下载Excel文件', download_admin_quoted_prices_path(:quoted_price => quoted_price), :method => :post
+      td = link_to edit_admin_quoted_price_path(quoted_price) do
+        button.ym-button.ym-edit 编辑
+      td = link_to admin_quoted_price_path(quoted_price), :confirm => 'Are you sure?', :method => :delete do
+        button.ym-button.ym-delete 删除
+      
+br
+
+= link_to new_admin_quoted_price_path do
+  button.ym-button.ym-add 创建报价表
