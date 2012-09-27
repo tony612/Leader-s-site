@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class Admin::UsersController < ApplicationController
+  skip_before_filter :signed_in_user, only: [:new, :create]
   # GET /users
   # GET /users.json
   def index
