@@ -1,0 +1,24 @@
+= form_tag search_quoted_prices_path, :class => 'ym-form ym-full' do
+  .ym-fbox-text
+    = label_tag 'country', "国家"
+    = text_field_tag 'country'
+  .ym-fbox-text
+    = label_tag 'weight', "实重"
+    = text_field_tag 'weight', nil, :size => 20, :placeholder => 'KG'
+  .ym-fbox-text
+    = label_tag 'volume', "体积重"
+    = text_field_tag 'volume', nil, :placeholder => 'KG'
+  .ym-fbox-text
+    = label_tag '体积'
+    = text_field_tag 'length', nil, :placeholder => "长：CM"
+    = text_field_tag 'width', nil, :placeholder => "宽：CM"
+    = text_field_tag 'height', nil, :placeholder => "高：CM"
+  .ym-fbox-select
+    = label_tag '运输方式'
+    = select_tag 'transport', "<option>UPS</option><option>DHC</option><option>FEDEX</option>".html_safe
+  .ym-fbox-select
+    = label_tag '类型'
+    = select_tag 'type', "<option>WPX</option><option>DOC</option>".html_safe
+  .ym-fbox-button
+    = submit_tag '计算资费'
+

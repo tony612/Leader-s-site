@@ -20,7 +20,9 @@ html
             - flash.each do |key, value|
               .box class="#{key}" 
                 = value
-          = content_for?(:content) ? yield(:content) : yield
+          .ym-grid
+            .ym-gbox
+              = content_for?(:content) ? yield(:content) : yield
         = render 'layouts/footer'
     - if Rails.env.development?
       = debug(params)

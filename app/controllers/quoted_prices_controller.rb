@@ -14,6 +14,59 @@ class QuotedPricesController < ApplicationController
       format.json { render json: @quoted_prices }
     end
   end
+  
+  def search 
+    if request.get?
+             
+    elsif request.post?
+      country, weight, transport, type = params[:country], [params[:weight], params[:volume]].max, params[:transport], params[:type]
+      @quoted_prices = QuotedPrice.all
+      @found_prices = []
+      QuotedPrice.each do |prices|
+        single_prices = []
+        regions = nil
+        prices.region_details.each do |region|
+          if region.zone == 0
+            if region.country.include? country
+              regions = region
+            end
+          elsif region.countrys_cn.include? country
+            p "=============================#{country}"
+            regions = region
+          end
+        end
+        index_weight = nil
+        prices.weight_details.each do |detail|
+          case prices.kind_prices
+          when '1'
+            if detail.by_weight.to_f >= weight.to_f && detail.by_weight.to_f - detail.single_weight.to_f <= weight.to_f
+              index_weight = detail.index
+            end
+          when '2'..'3'
+            if weight.to_f < prices.weight_details.first.begin.to_f
+              index_weight = -1 if prices.kind_prices == '2'
+            elsif weight.to_f <= detail.end.to_f && weight.to_f >= detail.begin.to_f
+              index_weight = detail.index
+            end
+          end
+        end
+        if regions && index_weight
+          single_prices << prices.transport << prices.name
+          p "index_weight============#{index_weight}"
+          if index_weight >= 0
+            single_prices << (regions.prices[index_weight].to_f * prices.oil_price).round(2).to_s
+            single_prices << "#{regions.prices[index_weight]} * #{prices.oil_price}"
+          elsif index_weight == -1
+            single_prices << ((regions.head_weight + (prices.weight_details.first.begin.to_f - 0.5)/0.5 * regions.continue_weight) * prices.oil_price).round(2).to_s
+            single_prices << "(#{regions.head_weight} + (#{prices.weight_details.first.begin.to_s} - 0.5)/0.5 * #{regions.continue_weight}) * #{prices.oil_price} "
+          end
+          p single_prices
+          single_prices << "RMB" << "20" << prices.remark
+          @found_prices << single_prices
+        end
+      end
+    end
+  end
 
   # GET /quoted_prices/1
   # GET /quoted_prices/1.json
@@ -48,13 +101,12 @@ class QuotedPricesController < ApplicationController
       regions = @quoted_price.region_details
       tbody = regions.count.times.map{[]}
       regions.each_index do |index|
-        tbody[index] << regions[index].zone << regions[index].country << regions[index].area
+        tbody[index] << regions[index].zone << regions[index].country.join(',') << regions[index].area.join(',')
         tbody[index] << regions[index].head_weight << regions[index].continue_weight if kind_of_prices == '2'
         regions[index].prices.each {|price| tbody[index] << price}
       end
       tbody.map {|body| @prices_table << body}
       
-
     end
 
     respond_to do |format|
@@ -108,8 +160,8 @@ class QuotedPricesController < ApplicationController
       ((cols_arr[0]+3)..cols_arr[1]).each do |col_index|
         region = RegionDetail.new
         region.zone = (sheet.cell rows_arr[0], col_index)[2..-1].to_i
-        region.countrys_en = (sheet.cell (rows_arr[2] + region.zone), (cols_arr[2] + 1))
-        region.countrys_cn = (sheet.cell (rows_arr[2] + region.zone), (cols_arr[2] + 2)) 
+        region.countrys_en = (sheet.cell (rows_arr[2] + region.zone), (cols_arr[2] + 1)).split(%r{[.,\s]\s*})
+        region.countrys_cn = (sheet.cell (rows_arr[2] + region.zone), (cols_arr[2] + 2)).split(%r{[.,\s]\s*}) 
         region.no = Time.new.to_formatted_s(:number)
         region.prices = []
         ((rows_arr[0] + 1)..rows_arr[1]).each do |row_index|
@@ -119,22 +171,24 @@ class QuotedPricesController < ApplicationController
         region.save()
         @quoted_price.region_details << region
       end
+      weight_index = 0
       ((rows_arr[0] + 1)..rows_arr[1]).each do |row_index|
         weight = WeightDetail.new
-        weight[:type], weight[:by_weight], weight[:single_weight] = 
-          sheet.cell(row_index, cols_arr[0]), sheet.cell(row_index, cols_arr[0] + 1), sheet.cell(row_index, cols_arr[0] + 2)
+        weight[:type], weight[:by_weight], weight[:single_weight], weight[:index] = 
+          sheet.cell(row_index, cols_arr[0]), sheet.cell(row_index, cols_arr[0] + 1), sheet.cell(row_index, cols_arr[0] + 2), weight_index
         p "weight detail =================== #{weight.type} #{weight.by_weight} #{weight.single_weight}"
         @quoted_price.weight_details << weight
+        weight_index += 1
       end
     when '2'..'3'
       ((rows_arr[0]+1)..rows_arr[1]).each do |row_index|
         row_value = sheet.row row_index
         region = RegionDetail.new
         region.zone = row_value[0]
-        region.countrys_en = (sheet.cell (rows_arr[2] + row_value[0]), (cols_arr[2] + 1))
-        region.countrys_cn = (sheet.cell (rows_arr[2] + row_value[0]), (cols_arr[2] + 2))
+        region.countrys_en = (sheet.cell (rows_arr[2] + row_value[0]), (cols_arr[2] + 1)).split(%r{[.,\s]\s*})
+        region.countrys_cn = (sheet.cell (rows_arr[2] + row_value[0]), (cols_arr[2] + 2)).split(%r{[.,\s]\s*})
         region.no = Time.new.to_formatted_s(:number)
-        region[:country], region[:area] = row_value[1..2]
+        region[:country], region[:area] = row_value[1].split(%r{[.,\s]\s*}), row_value[2].split(%r{[.,\s]\s*})
         region[:head_weight], region[:continue_weight] = *row_value[3..4] if kind_of_prices == "2"
         begin_index = kind_of_prices == '2'? 5 : 3
         region.prices = []
@@ -145,12 +199,14 @@ class QuotedPricesController < ApplicationController
       end
       row_head = sheet.row rows_arr[0]
       begin_index = kind_of_prices == '2'? 5 : 3
+      weight_index = 0
       row_head[begin_index..(cols_arr[1] - cols_arr[0])].each do |value|
         weight = WeightDetail.new
-        weight[:begin], weight[:end], weight[:type] = value[/(\d*)\D*(\d*)/, 1], value[/(\d*)\D*(\d*)/, 2], "WPX"
+        weight[:begin], weight[:end], weight[:type], weight[:index] = value[/(\d*)\D*(\d*)/, 1], value[/(\d*)\D*(\d*)/, 2], "WPX", weight_index
         #weight.save()
         p "weight ========================== #{weight.begin} #{weight.end} #{weight.type}"
         @quoted_price.weight_details << weight
+        weight_index += 1
       end
     end
   end
@@ -179,12 +235,14 @@ class QuotedPricesController < ApplicationController
   # PUT /quoted_prices/1
   # PUT /quoted_prices/1.json
   def update
-    p params[:id]
     @quoted_price = QuotedPrice.find(params[:id])
-
+    @quoted_price[:kind_prices] = params[:kind_of_prices]
     respond_to do |format|
       if @quoted_price.update_attributes(params[:quoted_price])
         @quoted_price.create_attachment(:attachment => params[:attachment]) if params[:attachment]
+        @quoted_price.region_details.delete_all()
+        @quoted_price.weight_details.delete_all()
+        handle_table()
         flash[:success] = "恭喜，报价表修改完成"
         format.html { redirect_to @quoted_price }
         format.json { head :no_content }

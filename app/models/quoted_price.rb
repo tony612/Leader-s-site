@@ -7,6 +7,8 @@ class QuotedPrice
   field :transport, type: String
   field :date_active, type: DateTime
   field :kind_prices, type: String
+  field :oil_price, type: Float
+  field :remark, type: String
 
   has_many :region_details
   embeds_many :weight_details

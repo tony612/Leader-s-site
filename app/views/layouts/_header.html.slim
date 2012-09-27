@@ -18,6 +18,8 @@ header
           span 用户
         li = link_to quoted_prices_path do
           span 报价表
+        li = link_to search_quoted_prices_path do
+          span 查询价格
       ul.pull-right
         - if signed_in?
           li = link_to "登出", logout_path, :method => :delete

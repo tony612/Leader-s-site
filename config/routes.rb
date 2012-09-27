@@ -2,11 +2,10 @@ Leader::Application.routes.draw do
   resources :quoted_prices do
     collection do
       post 'download'
+      get 'search'
+      post 'search'
     end
-    
-    member do
-      get 'price_detail'
-    end
+       
     resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
   end
   controller :sessions do
