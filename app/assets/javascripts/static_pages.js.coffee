@@ -7,7 +7,6 @@ $(document).ready( ->
     syncheight: true,
     tabbody: '.tab-content'
   })
-  console.log $('.jquery_tabs')
 
   $( ->
     $('#slides').slides({

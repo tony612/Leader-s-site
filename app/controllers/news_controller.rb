@@ -7,7 +7,20 @@ class NewsController < ApplicationController
   # GET /news.json
   def index
     @news = News.find_by_category
-    #@news.each {|news| p "news =========="; p news['value'].values[0].class}
+    @news_hash = {}
+    @news.each do |news|
+      value = news['value'].values[0]
+      @news_hash[news['_id']] = []
+      if value.class == Hash
+        @news_hash[news['_id']] << {title: value['title'], id: value['_id'], created_at: value['created_at'] && value['created_at'].to_date.to_formatted_s(:db)}
+      else
+        value.each do |one|
+          one_news = one['news']
+          @news_hash[news['_id']] << {title: one_news['title'], id: one_news['_id'], created_id: one_news['created_at'] && one_news['created_at'].to_date.to_formatted_s(:db)}
+        end
+      end
+    end
+    p @news_hash
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @news }
