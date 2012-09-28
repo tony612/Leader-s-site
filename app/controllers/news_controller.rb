@@ -6,10 +6,8 @@ class NewsController < ApplicationController
   # GET /news
   # GET /news.json
   def index
-    #@news = News.all
-    #@news = News.where(category: "行业动态")
     @news = News.find_by_category
-    @news.each {|news| p "news =========="; p news['value'].values[0].class}
+    #@news.each {|news| p "news =========="; p news['value'].values[0].class}
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @news }
