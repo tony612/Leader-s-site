@@ -3,6 +3,7 @@
 require 'spreadsheet'
 
 class Admin::QuotedPricesController < ApplicationController
+  before_filter :verify_ability
   # GET /quoted_prices
   # GET /quoted_prices.json
   def index
@@ -114,6 +115,7 @@ class Admin::QuotedPricesController < ApplicationController
   # POST /quoted_prices
   # POST /quoted_prices.json
   def create
+    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
     @quoted_price = QuotedPrice.new(params[:quoted_price])
     p "Attachment ------------------------------------------------"
     p params[:attachment]
@@ -135,6 +137,7 @@ class Admin::QuotedPricesController < ApplicationController
   # PUT /quoted_prices/1
   # PUT /quoted_prices/1.json
   def update
+    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
     @quoted_price = QuotedPrice.find(params[:id])
     @quoted_price[:kind_prices] = params[:kind_of_prices]
     respond_to do |format|

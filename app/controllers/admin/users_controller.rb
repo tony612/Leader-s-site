@@ -2,6 +2,7 @@
 
 class Admin::UsersController < ApplicationController
   skip_before_filter :signed_in_user, only: [:new, :create]
+  before_filter :verify_ability
   # GET /users
   # GET /users.json
   def index

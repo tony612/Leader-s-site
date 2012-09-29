@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class Admin::BillsController < ApplicationController
-
+  before_filter :verify_ability
   # GET /bills
   # GET /bills.json
   def index

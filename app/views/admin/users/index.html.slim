@@ -10,6 +10,9 @@ table
     th 地址
     th 超级管理员
     th 运单管理
+    th 新闻管理
+    th 用户管理
+    th 报价表管理
     th
     th
     th
@@ -21,12 +24,15 @@ table
       td = user.email
       td = user.address
       td = user.admin
-      td = user.bill_admin
+      td = user.bills_admin
+      td = user.news_admin
+      td = user.user_admin
+      td = user.prices_admin
       td = link_to 'Show', user
       td = link_to edit_admin_user_path(user) do
         button.ym-button.ym-edit 编辑
       td = link_to admin_user_path(user), :confirm => 'Are you sure?', :method => :delete do
-        button.ym-button.ymdelete 删除
+        button.ym-button.ym-delete 删除
 
 br
 

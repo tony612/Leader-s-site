@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class Admin::NewsController < ApplicationController
+  before_filter :verify_ability
   # GET /news/new
   # GET /news/new.json
   def new

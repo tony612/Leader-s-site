@@ -28,7 +28,17 @@
     = f.label :admin, "超级用户"
     = f.check_box :admin
   .ym-fbox-check
-    = f.label :bill_admin, "运单管理"
-    = f.check_box :bill_admin
+    = f.label :bills_admin, "运单管理"
+    = f.check_box :bills_admin
+  .ym-fbox-check
+    = f.label :bill_admin, "新闻管理"
+    = f.check_box :news_admin
+  .ym-fbox-check
+    = f.label :bill_admin, "用户管理"
+    = f.check_box :user_admin
+  .ym-fbox-check
+    = f.label :bill_admin, "报价表管理"
+    = f.check_box :prices_admin
+
   .ym-fbox-button
     = f.submit 'Save'

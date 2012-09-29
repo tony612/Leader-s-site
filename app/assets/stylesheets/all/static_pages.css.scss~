@@ -28,7 +28,14 @@ a:hover, a:focus {
   height:160px;
 }
 
-#slider {
+.slides_container {
+  width: 920px;
+  height: 270px;
+  div {
+    width:920px;
+    height:270px;
+    display:block;
+  }
 
   img {
     width: 920px;

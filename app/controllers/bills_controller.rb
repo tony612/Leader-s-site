@@ -5,7 +5,7 @@ class BillsController < ApplicationController
   # POST /bills
   def search
 
-    nos = params[:intl_no].split("\r\n")
+    nos = params[:intl_no].scan(/\d+/)
     p nos
     @bill = Bill.in(intl_no: nos)
     
