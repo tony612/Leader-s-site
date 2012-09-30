@@ -15,14 +15,14 @@
 /.ym-gbox
 .ym-g62.ym-gl
   /.ym-gbox
-  table
+  table.news.box-border
     - if @news
       - @news.each do |news|
         tr
-          td = link_to news.title, news
-          td = news.created_at && news.created_at.to_date
+          td = link_to news.title, news_index_path(id: news.id)
+          td.date = news.created_at && news.created_at.to_date
 .ym-g38.ym-gr
-  = form_tag search_bills_path, :class => "ym-form" do
+  = form_tag search_bills_path, :class => "ym-form box-border" do
     .ym-fbox-text
       b = label_tag "运件查询"
       = text_area_tag "intl_no", nil, :placeholder => "请输入运单号", :rows => 5

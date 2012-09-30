@@ -34,14 +34,14 @@ Leader::Application.routes.draw do
     resources :news, :except => [:show, :index]
     resources :users, :except => [:show]
     resources :quoted_prices do
-    collection do
-      post 'download'
-      get 'search'
-      post 'search'
-    end
+      collection do
+        post 'download'
+        get 'search'
+        post 'search'
+      end
        
-    resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
-  end
+      resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
+    end
 
   end
 
