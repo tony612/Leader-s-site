@@ -1,9 +1,20 @@
 body {
+  //background-image: url("/assets/shattered.png");
   background-color: #fff;
   color: #333;
   font-family:"微软雅黑", Pmingliu, arial, helvetica ,verdana, sans-serif;
   font-size: 13px;
   line-height: 18px;
+  //filter:alpha(opacity=100 finishopacity=10 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=blue,endcolorstr=white,gradientType=0);
+  //-ms-filter:alpha(opacity=100 finishopacity=10 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=blue,endcolorstr=white,gradientType=0);/*IE8*/
+  //background: #fff; /* 一些不支持背景渐变的浏览器 */
+  //background:-moz-linear-gradient(top, blue, rgba(255, 255, 255, 1));
+  //background:-webkit-gradient(linear, 0 0, 0 bottom, from(#0000ff), to(rgba(255, 255, 255, 0.5)));
+  //background:-o-linear-gradient(top, blue, rgba(255, 255, 255, 0.5));
+}
+
+body > div.ym-wrapper {
+  background: #fff;
 }
 
 p, ol, ul, td {
@@ -78,4 +89,8 @@ div {
       font-weight: bold;
     }
   }
+}
+
+img#header {
+  width: 960px;
 }

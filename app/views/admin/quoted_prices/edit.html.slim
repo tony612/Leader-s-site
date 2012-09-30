@@ -2,7 +2,7 @@ h1 编辑报价表
 
 == render 'form'
 
-= link_to 'Show', @quoted_price
-'|
-= link_to 'Back', quoted_prices_path
-
+= link_to @quoted_price do
+  button.ym-button 查看
+= link_to quoted_prices_path do
+  button.ym-button 返回

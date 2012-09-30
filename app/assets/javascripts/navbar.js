@@ -1,7 +1,7 @@
 function setActive(){
-  liObj = document.getElementById('navbar').getElementsByTagName('li');
-  aObj = document.getElementById('navbar').getElementsByTagName('a');
-  spanObj = document.getElementById('navbar').getElementsByTagName('span');
+  liObj = document.getElementById('cssmenu').getElementsByTagName('li');
+  aObj = document.getElementById('cssmenu').getElementsByTagName('a');
+  spanObj = document.getElementById('cssmenu').getElementsByTagName('span');
   find_it = false;
   for(i=aObj.length - 1;i >= 0;i--) {
     if (document.location.href.indexOf(aObj[i].href) >= 0){

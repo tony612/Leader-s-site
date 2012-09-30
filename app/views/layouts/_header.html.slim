@@ -1,8 +1,35 @@
 header
-  .ym-gbox
-    h1 Leader
-  .ym-gbox
-    nav#navbar.ym-hlist
+    /.ym-gbox
+    img#header src="/assets/header.jpg"
+    /.ym-gbox
+    #cssmenu
+      ul
+        li = link_to root_path do
+          span 首页
+        li = link_to static_pages_products_path do
+          span 产品
+        li = link_to news_index_path do
+          span 新闻中心
+        li = link_to static_pages_about_path do
+          span 关于我们
+        li = link_to search_quoted_prices_path do
+          span 查询价格
+        /ul.pull-right
+        .pull-right
+          - if signed_in?
+            li = link_to admin_bills_path do
+              span 运单
+            li = link_to admin_users_path do
+              span 用户
+            li = link_to admin_quoted_prices_path do
+              span 报价表
+            li = link_to "登出", logout_path, :method => :delete
+          - else
+            li = link_to login_path do
+              span 登录
+            li = link_to new_admin_user_path do
+              span 注册
+    /nav#navbar.ym-hlist
       ul
         li = link_to root_path do
           span 首页

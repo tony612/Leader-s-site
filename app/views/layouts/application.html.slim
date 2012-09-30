@@ -12,7 +12,7 @@ html
       script src="http://html5shim.googlecode.com/svn/trunk/html5.js"
   body
     .ym-wrapper
-      .ym-wbox
+        /.ym-wbox
 
         = render 'layouts/header'
         .main
@@ -21,8 +21,8 @@ html
               .box class="#{key}" 
                 = value
           .ym-grid
-            .ym-gbox
-              = content_for?(:content) ? yield(:content) : yield
+            /.ym-gbox
+            = content_for?(:content) ? yield(:content) : yield
         = render 'layouts/footer'
     - if Rails.env.development?
       = debug(params)
