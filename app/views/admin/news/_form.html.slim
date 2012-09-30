@@ -5,7 +5,7 @@
     = f.text_field :title
   .ym-fbox-text
     = f.label :content, "内容"
-    = f.text_area :content
+    = f.cktext_area :content, :input_html => {}
   .ym-fbox-text
     = f.label :category, "分类"
     = f.text_field :category

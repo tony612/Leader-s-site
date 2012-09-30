@@ -111,7 +111,6 @@
 			border-left: 4px solid rgba(0, 0, 0, .3);
 		}
 
-	
 		/* THE SUBMENUS */
 		#vcssmenu  > ul ul {
 			position: absolute;
@@ -126,8 +125,12 @@
 			-ms-transition: opacity .3s ease-in;
 		}
 
+    #vcssmenu > ul ul a {
+      width: 350px;
+    }
+
 		/* Showing the submenu when the user is hovering the parent link */
 		#vcssmenu  > ul li:hover>ul {
 			top: 0px;
-			opacity: 0.7;
+			opacity: 1;
 		}

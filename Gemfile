@@ -8,6 +8,7 @@ gem 'rails', '3.2.8'
 gem 'mongoid', '~> 3.0.0'
 gem 'moped'
 gem 'slim-rails'
+gem 'ckeditor', '3.7.1'
 
 gem 'thin'
 gem 'spreadsheet', '~> 0.7.3'
@@ -15,6 +16,7 @@ gem 'hoe', '~> 2.13'
 gem 'rdoc', '~> 3.10'
 gem 'carrierwave'
 gem 'mime-types'
+gem "mini_magick"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 # Gems used only for assets and not required
 # in production environments by default.

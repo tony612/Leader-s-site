@@ -15,5 +15,6 @@
 //= require jquery.tabs.min
 //= require easySlider
 //= require navbar
+//= require ckeditor/init
 //= require_tree .
 

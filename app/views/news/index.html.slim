@@ -1,6 +1,6 @@
 - provide :title, "新闻中心"
 
-.ym-g25.ym-gl
+.ym-g20.ym-gl
   #vcssmenu
     ul
       - @news_hash.each do |cat, content|
@@ -13,7 +13,7 @@
                 = link_to news_index_path(:id => news[:id]), :remote => true do
                   span = news[:title]
 
-.ym-g75.ym-gr#single_news
+.ym-g80.ym-gr#single_news
   = render "single"
 
 br

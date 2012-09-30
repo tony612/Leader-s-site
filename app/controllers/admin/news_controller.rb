@@ -27,7 +27,7 @@ class Admin::NewsController < ApplicationController
     respond_to do |format|
       if @news.save
         flash[:success] = "恭喜。新闻创建成功"
-        format.html { redirect_to @news, success: 'News was successfully created.' }
+        format.html { redirect_to news_index_path(id: @news.id) }
         format.json { render json: @news, status: :created, location: @news }
       else
         flash[:error] = "对不起，输入有误。请重新输入"
@@ -45,7 +45,8 @@ class Admin::NewsController < ApplicationController
     
     respond_to do |format|
       if @news.update_attributes(params[:news])
-        format.html { redirect_to @news, notice: 'News was successfully updated.' }
+        flash[:success] = "恭喜，新闻修改成功"
+        format.html { redirect_to news_index_path(:id => @news.id) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

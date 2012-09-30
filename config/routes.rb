@@ -1,4 +1,6 @@
 Leader::Application.routes.draw do
+  mount Ckeditor::Engine => "/ckeditor"
+ 
   resources :quoted_prices do
     collection do
       get 'search'

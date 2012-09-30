@@ -1,8 +1,10 @@
-h2
-  strong = @news.title
-p
-  = @news.content
-p
+.box-border
+  h3
+    strong = @news.title
+  p
+    = @news.created_at.to_formatted_s(:db)
+
+  = @news.content.html_safe
 br
 - if current_user && current_user.ability("news")
   = link_to edit_admin_news_path(@news) do
