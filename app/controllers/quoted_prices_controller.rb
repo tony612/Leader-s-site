@@ -55,6 +55,16 @@ class QuotedPricesController < ApplicationController
           @found_prices << single_prices
         end
       end
+
+      respond_to do |format|
+        unless @found_prices.empty?
+          format.html
+          format.js {render :layout => false}
+        else
+          format.html
+          format.js {render :layout => false}
+        end
+      end
     end
   end
 

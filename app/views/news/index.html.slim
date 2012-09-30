@@ -13,6 +13,7 @@
 
 br
 
-= link_to new_admin_news_path do
-  button.ym-button.ym-add 新建新闻
+-if current_user && current_user.ability("news")
+  = link_to new_admin_news_path do
+    button.ym-button.ym-add 新建新闻
   
