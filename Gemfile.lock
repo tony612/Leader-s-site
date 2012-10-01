@@ -37,7 +37,7 @@ GEM
     carrierwave-mongoid (0.1.0)
       carrierwave
       mongoid
-    ckeditor (3.7.1)
+    ckeditor (3.7.3)
       mime-types
       orm_adapter
     coffee-rails (3.2.2)
@@ -146,7 +146,7 @@ DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   carrierwave
   carrierwave-mongoid
-  ckeditor (= 3.7.1)
+  ckeditor (~> 3.7.2)
   coffee-rails (~> 3.2.1)
   hoe (~> 2.13)
   jquery-rails

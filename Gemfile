@@ -8,7 +8,7 @@ gem 'rails', '3.2.8'
 gem 'mongoid', '~> 3.0.0'
 gem 'moped'
 gem 'slim-rails'
-gem 'ckeditor', '3.7.1'
+gem 'ckeditor', '~> 3.7.2'
 
 gem 'thin'
 gem 'spreadsheet', '~> 0.7.3'
