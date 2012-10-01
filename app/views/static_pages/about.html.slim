@@ -1,14 +1,12 @@
 - provide :title, "关于我们"
 
-= content_for :menu_content do
+.ym-g20.ym-gl
   #vcssmenu
     ul
-      li: a[href="#"] Link 1
-      li: a[href="#"] Link 1
-      li: a[href="#"] Link 1
-      li: a[href="#"] Link 1
+      li = link_to "关于我们", static_pages_about_path(item: "guanyuwomen"), remote: true
+      li = link_to "燃油费", static_pages_about_path(item: "ranyoufei"), remote: true
+      li = link_to "联系我们", static_pages_about_path(item: "lianxiwomen"), remote: true
 
 
-= content_for :main_content do
-  p 内容
-
+.ym-g80.ym-gr#about_content
+  = render "about_content"

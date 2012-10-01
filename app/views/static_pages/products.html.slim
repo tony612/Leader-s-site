@@ -1,6 +1,17 @@
 - provide :title, "产品及业务"
 
-.jquery_tabs
+.ym-g20.ym-gl
+  #vcssmenu
+    ul
+      li = link_to "DHL服务", static_pages_products_path(item: "dhl"), remote: true
+      li = link_to "FedEx服务", static_pages_products_path(item: "fedex"), remote: true
+      li = link_to "UPS服务", static_pages_products_path(item: "ups"), remote: true
+      li = link_to "EMS服务", static_pages_products_path(item: "ems"), remote: true
+
+.ym-g80.ym-gr#products_content
+  = render "products_content"
+
+/.jquery_tabs
   h4 DHL服务
   .tab-content
     ol

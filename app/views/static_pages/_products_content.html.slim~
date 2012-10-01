@@ -1,0 +1,67 @@
+.box-border
+  - case @product
+  - when 'dhl'
+    | <p>&nbsp;</p>
+		<h4 style="margin: 0px; padding: 0px; color: rgb(102, 102, 102); font-family: Simsun; line-height: 20px; ">
+			一、DHL服务</h4>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			1）DHL国际快递价格<br />
+			&diams; HKDHL价格可在网站上直接查询：<br />
+			&diams; HKDHL体积重量计算公式为：长cm X 宽cm X 高cm /5000，如果货物体积重量大于实际重量，则按体积重量计费，二者取较大者。</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			2）DHL国际快递附加费<br />
+			&diams; 偏远附加费：去往偏远地区的快件需加收偏远地区附加费（美国除外），标准为：RMB 3.6/KG*(1+当月燃油)，每票最低消费为RMB 162*(1+当月燃油)； DHL查询偏远网址为：<a href="http://remoteareas.dhl.com/jsp/first.jsp" style="color: rgb(51, 51, 51); text-decoration: none; margin: 0px; padding: 0px; "><span style="margin: 0px; padding: 0px; color: rgb(0, 0, 255); ">http://remoteareas.dhl.com/jsp/first.jsp</span></a>我司操作人员会按照邮编或城市名查询是否偏远，网站查询并非百分百清准，但最终均以DHL帐单为准。如DHL帐单显示为偏远需要加收偏远费用，我司将自动收取此件偏远费用。<br />
+			&diams; 纺织品费用：纺织品一票加50元（美国60元，尼日利亚不接纺织品）<br />
+			&diams; 燃油附加费：HKDHL的燃油附加费已经包括在运费中了</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			3）DHL国际快递关税<br />
+			以具体清关费用为准(一般是申报价值高的产生的关税比较高，如果申报的价值比实际价值过于低，也会产生比较高的关税）如果收件人拒绝支付关税，关税将自动由发件人承担。</p>
+
+  - when 'fedex'
+    | <p>&nbsp;</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			联邦快递（FedEx）是全球最具规模的快递运输公司之一，为全球超过220个国家及地区提供快捷、可靠的快递服务。 中国联邦快递根据服务类型可分为：中国联邦快递优先型服务（International Priority (IP)）和中国联邦快递经济型服务（International Economy (IE)）。<br />
+			中国联邦快递优先型服务（International Priority (IP)）在三态系统中对应的货运代码为：CNFEDEX；中国联邦快递经济型服务（International Economy (IE)）在三态系统中对应的货运代码为：CNSFEDEX。</p>
+		<hr style="margin: 0px; padding: 0px; color: rgb(102, 102, 102); font-family: Simsun; line-height: 20px; " />
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			中国联邦快递优先型服务（CNFEDEX）和中国联邦快递经济型服务（CNSFEDEX）主要区别在于：</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			中国联邦快递优先型服务（CNFEDEX）</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			1、时效快：递送的时效为2到5个工作日；<br />
+			2、清关能力强；<br />
+			3、为全球超过200多个国家及地区提供快捷、可靠的快递服务。</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			中国联邦快递经济型服务（CNSFEDEX）</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			1、价格更加优惠，相对于中国联邦快递优先型服务的价格更有优势；<br />
+			2、时效比较快，递送的时效一般为4到6个工作日，时效比中国联邦快递优先型服务通常慢1到3个工作日；&nbsp;<br />
+			3、清关能力强，中国联邦快递经济型服务同中国联邦快递优先型服务为同样的团队进行清关处理；<br />
+			4、为全球超过90多个国家及地区提供快捷、可靠的快递服务，中国联邦快递经济型服务同中国联邦快递优先型服务享受同样的派送网络，只有很少部分国家的运输路线不同。</p>
+
+  - when 'ups'
+    | <p>&nbsp;</p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			UPS快递覆盖范围广，清关能力强，时效快。适合运送高价值、时效要求高的物品.有跟踪号，可以全程跟踪。</p>
+		<p>
+			<span style="margin: 0px; padding: 0px; font-family: Simsun; line-height: 20px; color: rgb(255, 102, 0); ">价格、附加费、关税</span></p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			1）HKUPS的价格可在网站上直接查询：<a href="http://www.ztgjwl.com/ZeTian/Web/Products.aspx" style="color: rgb(51, 51, 51); text-decoration: none; margin: 0px; padding: 0px; "><span style="margin: 0px; padding: 0px; color: rgb(0, 0, 255); "><u>http://www.ztgjwl.com</u></span></a><br />
+			2）HKUPS的体积重量计算公式为：长cm X 宽cm X 高cm /5000，如果货物体积重量大于实际重量，则按体积重量计费，2者取较大者。<br />
+			3）<span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">偏远附加费：</span><span lang="EN-US" style="margin: 0px; padding: 0px; ">RMB 3.5/KG*(1+</span><span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">当月燃油</span><span lang="EN-US" style="margin: 0px; padding: 0px; ">)</span><span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">，最低一票收</span><span lang="EN-US" style="margin: 0px; padding: 0px; ">RMB 171*</span><span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">（</span><span lang="EN-US" style="margin: 0px; padding: 0px; ">1+</span><span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">当月燃油）</span>。<br />
+			4）更改地址费用：每件加收77人民币，每票最高273人民币。<br />
+			5）寄件人支付目的地进口关税款附加费125元/票。<br />
+			6）以具体清关费用为准(一般是申报价值高的产生的关税比较高，如果申报的价值比实际价值过于低，也会产生比较高的关税，如收件人拒付关税，关税将自动改为寄件人支付，费用将从寄件人帐户扣除)<br />
+			7）HKUPS对寄往美国和加拿大，且地址为私人住宅区地址快件征收RMB23*<span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">（</span><span lang="EN-US" style="margin: 0px; padding: 0px; ">1+</span><span style="margin: 0px; padding: 0px; font-family: 宋体; font-size: 9pt; ">当月燃油）<span style="margin: 0px; padding: 0px; font-family: Arial; ">/票</span></span>的附加费。最终收取的费用三态速递会以HKUPS快递账单为准。</p>
+		<p>
+			<span style="margin: 0px; padding: 0px; font-family: Simsun; line-height: 20px; color: rgb(255, 102, 0); ">参考时效</span></p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			&diams; 参考派送时间：2&mdash;5个工作日。派送时效已上网到收件人收到此快件为准。<br />
+			&diams; 如遇到海关查车等不可抗拒的因素，派送时效就要已海关放行为准。</p>
+		<p>
+			<span style="margin: 0px; padding: 0px; font-family: Simsun; line-height: 20px; color: rgb(255, 102, 0); ">跟踪服务</span></p>
+		<p style="margin: 10px 0px; padding: 0px; color: rgb(102, 102, 102); line-height: 20px; font-family: Simsun; ">
+			&diams; HKUPS跟踪，请在网站：<a href="http://www.ups.com/content/us/en/index.jsx" style="color: rgb(51, 51, 51); text-decoration: none; margin: 0px; padding: 0px; "><span style="margin: 0px; padding: 0px; color: rgb(0, 0, 255); "><u>http://www.ups.com/content/us/en/index.jsx</u></span></a>&nbsp;查询</p>
+
+  - when 'ems'
+    |
