@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.tabs.min
+//= require jquery.tokeninput
 //= require easySlider
 //= require navbar
 //= require ckeditor/init

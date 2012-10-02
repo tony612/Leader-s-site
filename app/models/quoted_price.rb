@@ -13,4 +13,8 @@ class QuotedPrice
   has_many :region_details
   embeds_many :weight_details
   embeds_one :attachment, as: :attachmentable, class_name: 'Attachment', cascade_callbacks: true 
+
+  def country_tokens=(countries)
+    
+  end
 end

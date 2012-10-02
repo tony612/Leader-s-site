@@ -1,19 +1,25 @@
-table.bordertable
-  thead
-    tr
-      th 编号
-      th 运输方式
-      th 报价表名称
-      th 金额
-      th 计算公式
-      th 币种
-      th 计费重
-      th 报价备注
-  tbody
-    - if @found_prices && !@found_prices.empty?
+- if @found_prices && !@found_prices.empty?
+  table.bordertable
+    thead
+      tr
+        th 编号
+        th 运输方式
+        th 报价表名称
+        th 金额
+        th 计算公式
+        th 币种
+        th 计费重
+        th 报价备注
+    tbody
       - @found_prices.each do |price|
         tr
           td = @found_prices.index price
           - price.each do |single|
             td = single
+- else
+  p 
+    | （1）深圳Leader物流所有报价不包含货物运转过程中产生的海关关税、海关罚款、仓储费、收件人要求目的地派送地改地费用、目的地不能完成清关被退回的费用及从香港进口到大陆等费用,以上费用都由交货方承担支付，并直接计入结算单内。<br/>
+      （2）交货时，发票上必须注明海关编码，如不提供将默认为由深圳Leader物流代为处理，因此产生的一切后果由交货方自己承担。<br/>
+      （3）为提高深圳Leader物流操作时效，确保您的货物能够在第一时间正常转运，避免不必要的延误及误会，请您务必: 随货附带详细的交接清单、运单、发票，外箱上需自行写清楚单号及箱号。木箱等不可开箱的货物需提供保函（不接原木）；入单后请尽快联系深圳Leader物流财务对账、付款，谢谢！
+
 

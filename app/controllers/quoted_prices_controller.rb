@@ -9,10 +9,12 @@ class QuotedPricesController < ApplicationController
     if request.get?
              
     elsif request.post?
-      country, weight, transport, type = params[:country], [params[:weight], params[:volume]].max, params[:transport], params[:type]
+      p params[:country], params[:country].lstrip.rstrip[3..-1]
+      country, weight, transport, type = params[:country].lstrip.rstrip[3..-1], [params[:weight], params[:volume]].max, params[:transport], params[:type]
       @quoted_prices = QuotedPrice.all
       @found_prices = []
       QuotedPrice.each do |prices|
+
         single_prices = []
         regions = nil
         prices.region_details.each do |region|
@@ -55,7 +57,8 @@ class QuotedPricesController < ApplicationController
           @found_prices << single_prices
         end
       end
-
+      
+      #@countries = 
       respond_to do |format|
         unless @found_prices.empty?
           format.html

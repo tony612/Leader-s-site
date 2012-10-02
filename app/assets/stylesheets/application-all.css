@@ -3,6 +3,8 @@
  *
  * = require_self
  * =require_tree ./all
+ * = require token-input
+ * = require token-input-facebook
  *
  *
  */

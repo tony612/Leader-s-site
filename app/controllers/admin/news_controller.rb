@@ -6,7 +6,7 @@ class Admin::NewsController < ApplicationController
   # GET /news/new.json
   def new
     @news = News.new
-
+    @cats = News.all.distinct(:category)
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @news }
@@ -16,6 +16,7 @@ class Admin::NewsController < ApplicationController
   # GET /news/1/edit
   def edit
     @news = News.find(params[:id])
+    @cats = News.all.distinct(:category)
   end
 
   # POST /news

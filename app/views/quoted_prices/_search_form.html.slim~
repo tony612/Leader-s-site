@@ -1,0 +1,47 @@
+= form_tag search_quoted_prices_path, :class => 'ym-form ym-full', :remote => true do
+    /.ym-fbox-text
+    = label_tag 'country', "国家"
+    /= text_field_tag 'country'
+    input type="text" id="country" name="blah"
+  | <div>
+        <input type="text" id="demo-input-local" name="blah" />
+        <input type="button" value="Submit" />
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $("#demo-input-local").tokenInput([
+                {id: 7, name: "Ruby"},
+                {id: 11, name: "Python"},
+                {id: 13, name: "JavaScript"},
+                {id: 17, name: "ActionScript"},
+                {id: 19, name: "Scheme"},
+                {id: 23, name: "Lisp"},
+                {id: 29, name: "C#"},
+                {id: 31, name: "Fortran"},
+                {id: 37, name: "Visual Basic"},
+                {id: 41, name: "C"},
+                {id: 43, name: "C++"},
+                {id: 47, name: "Java"}
+            ]);
+        });
+        </script>
+    </div>
+  .ym-fbox-text
+    = label_tag 'weight', "实重"
+    = text_field_tag 'weight', nil, :size => 20, :placeholder => 'KG'
+  .ym-fbox-text
+    = label_tag 'volume', "体积重"
+    = text_field_tag 'volume', nil, :placeholder => 'KG'
+  .ym-fbox-text
+    = label_tag '体积'
+    = text_field_tag 'length', nil, :placeholder => "长：CM"
+    = text_field_tag 'width', nil, :placeholder => "宽：CM"
+    = text_field_tag 'height', nil, :placeholder => "高：CM"
+  .ym-fbox-select
+    = label_tag '运输方式'
+    = select_tag 'transport', "<option>UPS</option><option>DHC</option><option>FEDEX</option>".html_safe
+  .ym-fbox-select
+    = label_tag '类型'
+    = select_tag 'type', "<option>WPX</option><option>DOC</option>".html_safe
+  .ym-fbox-button
+    = submit_tag '计算资费'
+

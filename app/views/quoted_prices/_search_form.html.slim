@@ -1,7 +1,7 @@
 = form_tag search_quoted_prices_path, :class => 'ym-form ym-full', :remote => true do
-  .ym-fbox-text
-    = label_tag 'country', "国家"
-    = text_field_tag 'country'
+  /.ym-fbox-text
+  = label_tag 'country', "国家", :style => "margin-left: 15px;"
+  = text_field_tag 'country', :style => "margin-left: 15px;"
   .ym-fbox-text
     = label_tag 'weight', "实重"
     = text_field_tag 'weight', nil, :size => 20, :placeholder => 'KG'

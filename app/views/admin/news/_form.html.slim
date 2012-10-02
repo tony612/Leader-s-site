@@ -7,7 +7,7 @@
     = f.label :content, "内容"
     = f.cktext_area :content, :input_html => {}
   .ym-fbox-text
-    = f.label :category, "分类"
+    = f.label :category, "分类,可以选择#{@cats}中的一个，其他则自动创建新的分类"
     = f.text_field :category
   .ym-fbox-button
     = f.submit 'Save', :class => "ym-button"
