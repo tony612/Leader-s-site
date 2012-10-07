@@ -9,7 +9,7 @@ class Attachment
   
   attr_accessible :file_name, :content_type, :file_size, :attachment
 
-  embedded_in :attachmentable, polymorphic: true
+  #embedded_in :attachmentable, polymorphic: true
 
   mount_uploader :attachment, AttachmentUploader
 

@@ -42,6 +42,152 @@ class Admin::QuotedPricesController < ApplicationController
     @quoted_price = QuotedPrice.find(params[:id])
   end
   
+  def create_all
+    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
+    attachment = Attachment.create(:attachment => params[:attachment]) if params[:attachment]
+    p "create all===================================================================="
+    Spreadsheet.client_encoding = 'UTF-8'
+    tables = Spreadsheet.open "#{Rails.root}/public/uploads/quoted_prices/#{attachment.attachment_filename}"
+    tables.worksheets.each do |worksheet|
+      create_single(worksheet) if worksheet.cell 0, 0
+    end
+
+    redirect_to admin_quoted_prices_path
+  end
+  
+  def create_single(worksheet)
+    region_begin, region_end = worksheet.cell(0, 0).split(/\W/)
+    zone_index, country_index = worksheet.cell(0, 1), worksheet.cell(0, 2)
+    doc_begin, doc_end = worksheet.cell(0, 3).split(/\W/)
+    small_begin, small_end = worksheet.cell(0, 4).split(/\W/)
+    big_begin, big_end = worksheet.cell(0, 5).split(/\W/)
+    data_arr = [region_begin, region_end, zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end]
+    p data_arr
+    
+    if region_begin.match(/\d+/)
+      region_way = "row"
+    else
+      region_way = "col"
+    end
+    region_begin, region_end, zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end = data_arr.map{|c| c = c && letter_to_int(c).to_i}
+    region_begin -= 1
+    region_end -= 1
+    p [region_begin, region_end, zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end]
+    quoted_price = QuotedPrice.new(params[:quoted_prices])
+    quoted_price.name, quoted_price.transport, quoted_price.doc_type, quoted_price.big_type = worksheet.name, worksheet.name[/UPS|DHL|Fedex/i], !!doc_begin, !small_begin
+    if region_way == "row"
+      p region_begin
+      thead = worksheet.row(region_begin - 1)
+      (0..20).each {|i| p thead.at(i)}
+      quoted_price.small_celling = thead.at(big_begin).scan(/\d+/)[0]
+      quoted_price[:doc_head], quoted_price[:doc_continue] = thead.at(doc_begin)[/\d+\.?\d*/], thead.at(doc_end)[/\d+\.?\d*/] if !!doc_begin
+      unless quoted_price.big_type
+        quoted_price[:small_head] = []
+        quoted_price[:small_continue] = []
+        quoted_price[:small_range] = []
+        (small_begin..small_end).each do |s_index|
+          s = thead.at(s_index)
+          if s.match('首')
+          quoted_price[:small_head] << [s[/\d+\.?\d*/], s_index]
+          elsif s.match '\+'
+            s_celling = thead[s_index+1]
+            quoted_price[:small_range] << [s[/\d+\.?\d*/], s_celling[/\d+\.?\d*/], s_index]
+          elsif s.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
+            s_range = s.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
+            quoted_price[:small_range] << [s_range[1], s_range[2], s_index]
+          elsif s.match '续'
+            quoted_price[:small_continue] << [s[/\d+\.?\d*/], s_index]
+          end
+        end
+      end
+      if big_begin
+        quoted_price[:big_range] = []
+        (big_begin..big_end).each do |b_index|
+          b = thead.at(b_index)
+          if b.match /(\d*\.?\d*)\D*(\d*\.?\d*)/
+            b_range = b.match /(\d*\.?\d*)\D*(\d*\.?\d*)/
+            b_celling = b == thead[big_end]?  "99999" : b_range[2]
+            quoted_price[:big_range] << [b_range[1], b_celling, b_index]
+          else
+            b_celling = b == thead[big_end]?  "99999" : thead[b_index+1]
+            quoted_price[:big_range] << [b[/\d*\.?\d*/], b_celling[/\d*\.?\d*/], b_index]
+          end
+        end
+      end
+      p quoted_price
+      (region_begin..region_end).each do |row_index|
+        row = worksheet.row row_index
+        region_detail = RegionDetail.new(zone: row[zone_index], countrys_cn: row[country_index])
+        region_detail[:doc_prices], region_detail[:small_prices], region_detail[:big_prices] = [], [], []
+        (doc_begin..doc_end).each { |doc_index| region_detail[:doc_prices] << row.at(doc_index)} if doc_begin
+        (small_begin..small_end).each {|s_index| region_detail[:small_prices] << row.at(s_index)} if small_begin
+        (big_begin..big_end).each {|b_index| region_detail[:big_prices] << row.at(b_index)} if big_begin
+        p region_detail
+      end
+    end
+    
+    
+  end
+  # POST /quoted_prices
+  # POST /quoted_prices.json
+  def create
+    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
+    @quoted_price = QuotedPrice.new(params[:quoted_price])
+    
+    #p "Attachment ------------------------------------------------"
+    #p params[:attachment]
+    #@quoted_price[:kind_prices] = params[:kind_of_prices]
+    respond_to do |format|
+      if @quoted_price.save
+        #@quoted_price.create_attachment(:attachment => params[:attachment]) if params[:attachment]
+        #handle_table()
+        #flash[:success] = "恭喜，成功上传报价表——#{@quoted_price.name}"
+        format.html { redirect_to @quoted_price }
+        format.json { render json: @quoted_price, status: :created, location: @quoted_price }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @quoted_price.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /quoted_prices/1
+  # PUT /quoted_prices/1.json
+  def update
+    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
+    @quoted_price = QuotedPrice.find(params[:id])
+    @quoted_price[:kind_prices] = params[:kind_of_prices]
+    respond_to do |format|
+      if @quoted_price.update_attributes(params[:quoted_price])
+        @quoted_price.create_attachment(:attachment => params[:attachment]) if params[:attachment]
+        @quoted_price.region_details.delete_all()
+        @quoted_price.weight_details.delete_all()
+        handle_table()
+        flash[:success] = "恭喜，报价表修改完成"
+        format.html { redirect_to @quoted_price }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @quoted_price.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  # DELETE /quoted_prices/1
+  # DELETE /quoted_prices/1.json
+  def destroy
+    @quoted_price = QuotedPrice.find(params[:id])
+    @quoted_price.destroy
+
+    respond_to do |format|
+      format.html { redirect_to quoted_prices_url }
+      format.json { head :no_content }
+    end
+  end
+
+
+##########
+=begin
   def handle_table()
     p "=============quoted prices #{@quoted_price.name}"
     kind_of_prices = params[:kind_of_prices]
@@ -111,66 +257,12 @@ class Admin::QuotedPricesController < ApplicationController
       end
     end
   end
-
-  # POST /quoted_prices
-  # POST /quoted_prices.json
-  def create
-    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
-    @quoted_price = QuotedPrice.new(params[:quoted_price])
-    p "Attachment ------------------------------------------------"
-    p params[:attachment]
-    @quoted_price[:kind_prices] = params[:kind_of_prices]
-    respond_to do |format|
-      if @quoted_price.save
-        @quoted_price.create_attachment(:attachment => params[:attachment]) if params[:attachment]
-        handle_table()
-        flash[:success] = "恭喜，成功上传报价表——#{@quoted_price.name}"
-        format.html { redirect_to @quoted_price }
-        format.json { render json: @quoted_price, status: :created, location: @quoted_price }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @quoted_price.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /quoted_prices/1
-  # PUT /quoted_prices/1.json
-  def update
-    params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].lstrip.rstrip.match(/^\d+$/)
-    @quoted_price = QuotedPrice.find(params[:id])
-    @quoted_price[:kind_prices] = params[:kind_of_prices]
-    respond_to do |format|
-      if @quoted_price.update_attributes(params[:quoted_price])
-        @quoted_price.create_attachment(:attachment => params[:attachment]) if params[:attachment]
-        @quoted_price.region_details.delete_all()
-        @quoted_price.weight_details.delete_all()
-        handle_table()
-        flash[:success] = "恭喜，报价表修改完成"
-        format.html { redirect_to @quoted_price }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @quoted_price.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-  
-  # DELETE /quoted_prices/1
-  # DELETE /quoted_prices/1.json
-  def destroy
-    @quoted_price = QuotedPrice.find(params[:id])
-    @quoted_price.destroy
-
-    respond_to do |format|
-      format.html { redirect_to quoted_prices_url }
-      format.json { head :no_content }
-    end
-  end
+=end
 
   private
 
   def letter_to_int(arr)
+    return arr unless arr && arr.to_s.match(/^[a-zA-Z]*$/)
     arr = arr.upcase
     value = 0
     time = arr.length - 1
@@ -180,5 +272,6 @@ class Admin::QuotedPricesController < ApplicationController
     end
     value - 1
   end 
+  
 
 end

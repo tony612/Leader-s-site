@@ -40,6 +40,7 @@ Leader::Application.routes.draw do
         post 'download'
         get 'search'
         post 'search'
+        post 'create_all'
       end
        
       resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
