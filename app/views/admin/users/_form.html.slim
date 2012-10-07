@@ -24,21 +24,23 @@
   .ym-fbox-text
     = f.label :password_confirmation, '密码确认'
     = f.password_field :password_confirmation, size: 40
-  .ym-fbox-check
-    = f.label :admin, "超级用户"
-    = f.check_box :admin
-  .ym-fbox-check
-    = f.label :bills_admin, "运单管理"
-    = f.check_box :bills_admin
-  .ym-fbox-check
-    = f.label :bill_admin, "新闻管理"
-    = f.check_box :news_admin
-  .ym-fbox-check
-    = f.label :bill_admin, "用户管理"
-    = f.check_box :user_admin
-  .ym-fbox-check
-    = f.label :bill_admin, "报价表管理"
-    = f.check_box :prices_admin
+  - if current_user.ability 'admin'
+    .ym-fbox-check
+      = f.label :admin, "超级用户"
+      = f.check_box :admin
+    .ym-fbox-check
+      = f.label :bill_admin, "用户管理"
+      = f.check_box :user_admin
+  - if @user.ability('admin') || !@user.ability('users')
+    .ym-fbox-check
+      = f.label :bills_admin, "运单管理"
+      = f.check_box :bills_admin
+    .ym-fbox-check
+      = f.label :bill_admin, "新闻管理"
+      = f.check_box :news_admin
+    .ym-fbox-check
+      = f.label :bill_admin, "报价表管理"
+      = f.check_box :prices_admin
 
   .ym-fbox-button
     = f.submit 'Save'

@@ -1,13 +1,14 @@
-.box-border
-  h3
-    strong = @news.title
-  p
-    = @news.created_at.to_formatted_s(:db)
+- if @news
+  .box-border
+    h3
+      strong = @news.title
+    p
+      = @news.created_at.to_formatted_s(:db)
 
-  = @news.content.html_safe
-br
-- if current_user && current_user.ability("news")
-  = link_to edit_admin_news_path(@news) do
-    button.ym-button.ym-edit 编辑
-  /= link_to admin_news_path(@news), :confirm => "确定删除？", :method => :delete do
-    button.ym-button.ym-delete 删除
+    = @news.content.html_safe
+    br
+    - if current_user && current_user.ability("news")
+      = link_to edit_admin_news_path(@news) do
+        button.ym-button.ym-edit 编辑
+      = link_to admin_news_path(@news), :confirm => "确定删除？", :method => :delete do
+        button.ym-button.ym-delete 删除

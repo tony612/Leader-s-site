@@ -18,21 +18,22 @@ table
     th
 
   - @users.each do |user|
-    tr
-      td = user.username
-      td = user.name
-      td = user.email
-      td = user.address
-      td = user.admin
-      td = user.bills_admin
-      td = user.news_admin
-      td = user.user_admin
-      td = user.prices_admin
-      td = link_to 'Show', user
-      td = link_to edit_admin_user_path(user) do
-        button.ym-button.ym-edit 编辑
-      td = link_to admin_user_path(user), :confirm => 'Are you sure?', :method => :delete do
-        button.ym-button.ym-delete 删除
+    - if current_user.ability('super') || !user.ability('super')
+      tr
+        td = user.username
+        td = user.name
+        td = user.email
+        td = user.address
+        td = boolean_ch user.admin
+        td = boolean_ch user.bills_admin
+        td = boolean_ch user.news_admin
+        td = boolean_ch user.user_admin
+        td = boolean_ch user.prices_admin
+        td = link_to 'Show', user
+        td = link_to edit_admin_user_path(user) do
+          button.ym-button.ym-edit 编辑
+        td = link_to admin_user_path(user), :confirm => 'Are you sure?', :method => :delete do
+          button.ym-button.ym-delete 删除
 
 br
 

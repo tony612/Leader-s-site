@@ -6,7 +6,12 @@ class Admin::UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    if current_user.ability 'super'
+      @users = User.all
+    elsif current_user.ability 'users'
+      @users = User.all.nin(admin: true, user_admin: true)
+    end
+    @users.each {|user| p user}
 
     respond_to do |format|
       format.html # index.html.erb
@@ -33,8 +38,12 @@ class Admin::UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    unless current_user.ability 'super'
+      params[:user][:admin] = false
+      params[:user][:user_admin] = false
+    end
     @user = User.new(params[:user])
-
+  
     respond_to do |format|
       if @user.save
         flash[:success] = "恭喜，用户创建成功"
@@ -52,13 +61,24 @@ class Admin::UsersController < ApplicationController
   # PUT /users/1.json
   def update
     @user = User.find(params[:id])
+    unless current_user.ability 'super'
+      params[:user][:admin] = false
+      params[:user][:user_admin] = @user.user_admin if params[:user][:user_admin] != @user.user_admin
+    end
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        flash[:success] = "恭喜你，更新成功"
-        format.html { redirect_to @user }
+        if @user.id == current_user.id
+          flash[:success] = "恭喜，资料更新成功，因为修改了自己的帐号，为了安全，请重新登录"
+          path = login_path
+        else 
+          flash[:success] = "恭喜您，更新成功"
+          path = admin_users_path
+        end
+        format.html { redirect_to path }
         format.json { head :no_content }
       else
+        flash[:error] = "对不起，修改失败，请重新输入"
         format.html { render action: "edit" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -69,7 +89,7 @@ class Admin::UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
+    @user.destroy if !current_user.ability('super') && (@user.ability('super') || @user.alility('users'))
 
     respond_to do |format|
       format.html { redirect_to admin_users_url }
