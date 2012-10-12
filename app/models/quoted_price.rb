@@ -13,11 +13,9 @@ class QuotedPrice
   field :doc_type, type: Boolean
   field :big_type, type: Boolean
   field :small_celling, type: Integer
-  #field doc_head, doc_continue
-  #field small_head, small_continue, small_range
+  #field doc_head Integer, doc_continue Integer, doc_range Array
+  #field small_head Array, small_continue Array, small_range Array
   field :big_range, type: Array
   has_many :region_details
-  #embeds_many :weight_details
-  #embeds_one :attachment, as: :attachmentable, class_name: 'Attachment', cascade_callbacks: true 
 
 end
