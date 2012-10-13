@@ -130,42 +130,7 @@ class QuotedPricesController < ApplicationController
   def show
     @quoted_price = QuotedPrice.find(params[:id])
     @prices_table = []
-    kind_of_prices = @quoted_price.kind_prices
-    case kind_of_prices
-    when "1"
-      thead = []
-      thead << "类型" << "截止重" << "单位重"
-      regions = @quoted_price.region_details
-      regions.each {|region| thead << "分区" + region.zone.to_s}
-      p thead
-      @prices_table << thead
-      weights = @quoted_price.weight_details
-      tbody = weights.count.times.map{[]}
-      weights.each_index do |index|
-        tbody[index] << weights[index][:type] << weights[index][:by_weight] << weights[index][:single_weight]
-        regions.each {|region| tbody[index] << region.prices[index]}
-      end
-      p tbody
-      tbody.map {|body| @prices_table << body}
-    when '2'..'3'
-      thead = []
-      thead << "分区" << "国家" << "地区"
-      thead << "首重0.5" << "续重0.5" if kind_of_prices == '2'
-      weights = @quoted_price.weight_details
-      weights.each {|weight| thead << weight.begin + '-' + weight.end}
-      @prices_table << thead
-      p thead
-      regions = @quoted_price.region_details
-      tbody = regions.count.times.map{[]}
-      regions.each_index do |index|
-        tbody[index] << regions[index].zone << regions[index].country.join(',') << regions[index].area.join(',')
-        tbody[index] << regions[index].head_weight << regions[index].continue_weight if kind_of_prices == '2'
-        regions[index].prices.each {|price| tbody[index] << price}
-      end
-      tbody.map {|body| @prices_table << body}
-      
-    end
-
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @quoted_price }

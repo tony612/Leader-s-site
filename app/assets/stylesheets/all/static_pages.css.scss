@@ -121,3 +121,12 @@ table.news {
 		color:#fff;
 		}
 	ol#controls li a:focus, #prevBtn a:focus, #nextBtn a:focus{outline:none;}
+
+
+#coin-slider {
+  a.cs-next, a.cs-prev {
+    background-color:black;
+    color:white;
+  }
+}
+

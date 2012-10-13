@@ -2,10 +2,10 @@
  * application-all.css
  *
  * = require_self
- * =require_tree ./all
+ * = require_tree ./all
  * = require token-input
  * = require token-input-facebook
- *
+ * = require coin-slider-styles
  *
  */
 

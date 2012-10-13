@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require jquery.tabs.min
 //= require jquery.tokeninput
-//= require easySlider
+//= require coin-slider.min
 //= require navbar
 //= require ckeditor/init
 //= require_tree .
