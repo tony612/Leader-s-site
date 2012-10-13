@@ -1,5 +1,5 @@
-= form_for [:admin, @quoted_price], :html => {:class => "ym-form ym-full ym-g38", :multipart => true} do |f|
-  - unless meta[:url] == admin_quoted_price_path
+= form_for [:admin, @quoted_price], :url => meta[:url], :html => { :class => "ym-form ym-full ym-g38", :multipart => true} do |f|
+  - if meta[:url] == update_all_admin_quoted_prices_path || meta[:url] == create_all_admin_quoted_prices_path
    .ym-fbox-select
       = label_tag :attachment, "请选择文件上传"
       = file_field_tag :attachment
@@ -12,7 +12,7 @@
   .ym-fbox-text
     = f.label :oil_price, "油价"
     = f.text_field :oil_price, value: 1
-  - if meta[:url] == admin_quoted_price_path
+  - unless meta[:url] == update_all_admin_quoted_prices_path || meta[:url] == create_all_admin_quoted_prices_path
     .ym-fbox-text
       = f.label :transport, "运输方式"
       = f.text_field :transport 

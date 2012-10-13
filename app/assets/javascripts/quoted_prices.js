@@ -125,7 +125,7 @@ $(document).ready(function () {
     {name_en: 'Liechtenstein', name: 'LI 列支顿士登'},
     {name_en: 'Lithuania', name: 'LT 立陶宛'},
     {name_en: 'Luxembourg', name: 'LU 卢森堡'},
-    {name_en: 'Macao', name: 'MO 中国澳门特区'},
+    {name_en: 'Macao', name: 'MO 澳门'},
     {name_en: 'Macedonia, The Former Yugoslav Republic of', name: 'MK 马其顿'},
     {name_en: 'Madagascar', name: 'MG 马达加斯加'},
     {name_en: 'Malawi', name: 'MW 马拉维'},

@@ -115,15 +115,15 @@ class Admin::QuotedPricesController < ApplicationController
         (small_begin..small_end).each do |s_index|
           s = thead.at(s_index)
           if s.match('首')
-            quoted_price[:small_head] << [s[/\d+\.?\d*/], s_index-small_begin]
+            quoted_price[:small_head] << [s[/\d+\.?\d*/].to_f.round(2), s_index-small_begin]
           elsif s.match '\+'
             s_celling = thead[s_index+1]
-            quoted_price[:small_range] << [s[/\d+\.?\d*/], s_celling[/\d+\.?\d*/], s_index-small_begin, false]
+            quoted_price[:small_range] << [s[/\d+\.?\d*/].to_f.round(2), s_celling[/\d+\.?\d*/].to_f.round(2), s_index-small_begin, false]
           elsif s.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
             s_range = s.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
-            quoted_price[:small_range] << [s_range[1], s_range[2], s_index-small_begin, false]
+            quoted_price[:small_range] << [s_range[1].to_f.round(2), s_range[2].to_f.round(2), s_index-small_begin, true]
           elsif s.match '续'
-            quoted_price[:small_continue] << [s[/\d+\.?\d*/], s_index-small_begin]
+            quoted_price[:small_continue] << [s[/\d+\.?\d*/].to_f.round(2), s_index-small_begin]
           end
         end
       end
@@ -134,10 +134,10 @@ class Admin::QuotedPricesController < ApplicationController
           if b.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
             b_range = b.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
             b_celling = b == thead[big_end]?  "99999" : b_range[2]
-            quoted_price[:big_range] << [b_range[1], b_celling, b_index-big_begin]
+            quoted_price[:big_range] << [b_range[1].to_f.round(2), b_celling.to_f.round(2), b_index-big_begin]
           else
             b_celling = b == thead[big_end]?  "99999" : thead[b_index+1]
-            quoted_price[:big_range] << [b[/\d+\.?\d*/], b_celling[/\d+\.?\d*/], b_index-big_begin]
+            quoted_price[:big_range] << [b[/\d+\.?\d*/].to_f.round(2), b_celling[/\d+\.?\d*/].to_f.round(2), b_index-big_begin]
           end
         end
       end
@@ -147,9 +147,9 @@ class Admin::QuotedPricesController < ApplicationController
         arr = region_way=='row'? worksheet.row(arr_index) : worksheet.column(arr_index)
         region_detail = RegionDetail.new(zone: (zone_index && arr[zone_index]) || -1, countrys_cn: (country_index && arr[country_index].split(/[,.\-。，]+/)) || "")
         region_detail[:doc_prices], region_detail[:small_prices], region_detail[:big_prices] = [], [], []
-        (doc_begin..doc_end).each { |doc_index| region_detail[:doc_prices] << arr.at(doc_index)} if doc_begin
-        (small_begin..small_end).each {|s_index| region_detail[:small_prices] << arr.at(s_index)} if small_begin
-        (big_begin..big_end).each {|b_index| region_detail[:big_prices] << arr.at(b_index)} if big_begin
+        (doc_begin..doc_end).each { |doc_index| region_detail[:doc_prices] << arr.at(doc_index).to_f.round(2)} if doc_begin
+        (small_begin..small_end).each {|s_index| region_detail[:small_prices] << arr.at(s_index).to_f.round(2)} if small_begin
+        (big_begin..big_end).each {|b_index| region_detail[:big_prices] << arr.at(b_index).to_f.round(2)} if big_begin
         p region_detail if arr_index == region_begin
         region_detail.save()
         quoted_price.region_details << region_detail

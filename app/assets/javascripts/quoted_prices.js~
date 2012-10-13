@@ -240,5 +240,5 @@ $(document).ready(function () {
     {name_en: 'Yemen', name: 'YE 也门'},
     {name_en: 'Zambia', name: 'ZM 赞比呀'},
     {name_en: 'Zimbabwe', name: 'ZW 津巴布韦'}
-], {theme: "facebook", hintText: "请输入要查询国家的英文首字母简写或中文如：US，美国", tokenLimit: 1});
+], {theme: 'facebook', hintText: "请输入查询国家的英文间写或中文，如：US/美国", noResultsText: "没有找到，试试别的吧，或者联系我们", tokenLimit: 1, tokenValue: 'name', deleteText: "删除"});
 });
