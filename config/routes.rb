@@ -1,7 +1,7 @@
 Leader::Application.routes.draw do
   mount Ckeditor::Engine => "/ckeditor"
- 
-  resources :quoted_prices do
+
+  resources(:quoted_prices, :only => [:search, :show]) do
     collection do
       get 'search'
       post 'search'
@@ -19,7 +19,7 @@ Leader::Application.routes.draw do
 
   resources :users, :only => [:show]
 
-  resources :bills do
+  resources :bills, :only => [:search] do
     collection do
       post 'search'
     end
@@ -41,6 +41,8 @@ Leader::Application.routes.draw do
         get 'search'
         post 'search'
         post 'create_all'
+        post 'update_all'
+        get 'edit_all'
       end
        
       resources :attachments, :only => [:new, :create, :show], :path => "pricetable"

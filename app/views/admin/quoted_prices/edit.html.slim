@@ -1,8 +1,8 @@
 h1 编辑报价表
 
-== render 'form'
+= render 'form', :meta => {:url => admin_quoted_price_path}
 
 = link_to @quoted_price do
   button.ym-button 查看
-= link_to quoted_prices_path do
+= link_to admin_quoted_prices_path do
   button.ym-button 返回

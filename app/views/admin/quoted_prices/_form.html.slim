@@ -1,14 +1,8 @@
-= form_for [:admin, @quoted_price], :url => create_all_admin_quoted_prices_path, :html => {:class => "ym-form ym-full ym-g38", :multipart => true} do |f|
-
-  /.ym-fbox-text
-    = f.label :name, "名称"
-    = f.text_field :name
-  /.ym-fbox-text
-    = f.label :transport, "运输方式"
-    = f.text_field :transport
-  .ym-fbox-select
-    = label_tag :attachment, "请选择文件上传"
-    = file_field_tag :attachment
+= form_for [:admin, @quoted_price], :html => {:class => "ym-form ym-full ym-g38", :multipart => true} do |f|
+  - unless meta[:url] == admin_quoted_price_path
+   .ym-fbox-select
+      = label_tag :attachment, "请选择文件上传"
+      = file_field_tag :attachment
   .ym-fbox-text
     = f.label :currency, "币种"
     = f.text_field :currency, :value => "RMB"
@@ -18,25 +12,16 @@
   .ym-fbox-text
     = f.label :oil_price, "油价"
     = f.text_field :oil_price, value: 1
+  - if meta[:url] == admin_quoted_price_path
+    .ym-fbox-text
+      = f.label :transport, "运输方式"
+      = f.text_field :transport 
   .ym-fbox-text
     = f.label :remark
     = f.text_area :remark
 
-  /.ym-fbox-select
-    = label_tag 'prices_rows_range', "报价表行数范围(用逗号隔开, 如：3,18)"
-    = text_field_tag 'prices_rows_range'
-  /.ym-fbox-select
-    = label_tag 'prices_cols_range', "报价表列数范围(用逗号隔开，如：A,P)"
-    = text_field_tag 'prices_cols_range'
-  /.ym-fbox-select
-    = label_tag 'kind_of_prices', "报价表种类"
-    = select_tag 'kind_of_prices', "<option>1</option><option>2</option><option>3</option>".html_safe
-  /.ym-fbox-select
-    = label_tag 'area_rows_range', "分区表行数范围(用逗号隔开, 如：23,34)"
-    = text_field_tag 'area_rows_range'
-  /.ym-fbox-select
-    = label_tag 'area_rows_range', "分区表列数范围(用逗号隔开，如：A,P)"
-    = text_field_tag 'area_cols_range'
-  /.ym-fbox-select
-    = number_field_tag "报价开始行数"
-  .ym-fbox-button = f.submit 'Save'
+  .ym-fbox-button 
+    - if meta[:url] == update_all_admin_quoted_prices_path
+      = f.submit '确定', :confirm => "确定删除现在所有数据并依据所上传文件重新生成数据吗？"
+    - else
+      = f.submit '确定'

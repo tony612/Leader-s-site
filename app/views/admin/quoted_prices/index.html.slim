@@ -8,8 +8,6 @@ table
     th 运输方式
     th 币种
     th 生效日期
-    th 附件
-    th
     th
     th
 
@@ -19,13 +17,17 @@ table
       td = quoted_price.transport
       td = quoted_price.currency
       td = quoted_price.date_active.to_date
-      td = link_to '下载Excel文件', download_admin_quoted_prices_path(:quoted_price => quoted_price), :method => :post
-      td = link_to edit_admin_quoted_price_path(quoted_price) do
-        button.ym-button.ym-edit 编辑
+      td = link_to edit_admin_quoted_price_path(quoted_price), :method => :get do
+        button.ym-button.ym-delete 编辑
       td = link_to admin_quoted_price_path(quoted_price), :confirm => 'Are you sure?', :method => :delete do
         button.ym-button.ym-delete 删除
       
 br
 
 = link_to new_admin_quoted_price_path do
-  button.ym-button.ym-add 创建报价表
+  button.ym-button.ym-add 添加报价表
+= link_to edit_all_admin_quoted_prices_path do
+  button.ym-button.ym-edit 更新报价表
+= link_to download_admin_quoted_prices_path, :method => :post do
+  button.ym-button 下载报价表
+

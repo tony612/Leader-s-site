@@ -1,0 +1,8 @@
+h1 更新报价表
+
+h4.dimmed 注意：此操作会删除当前所有报价表并依照上传文件添加报价表!
+
+= render 'form', :meta => {:url => update_all_admin_quoted_prices_path}
+
+= link_to admin_quoted_prices_path do
+  button.ym-button 返回

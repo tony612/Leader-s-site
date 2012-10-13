@@ -9,8 +9,8 @@ class QuotedPricesController < ApplicationController
     if request.get?
              
     elsif request.post?
-      p params[:country], params[:country].lstrip.rstrip[3..-1]
-      country, weight, transport, type = params[:country].lstrip.rstrip[3..-1], [params[:weight], params[:volume]].max, params[:transport], params[:type]
+      p params[:country], params[:country].strip[3..-1]
+      country, weight, transport, type = params[:country].strip[3..-1], [params[:weight], params[:volume]].max, params[:transport], params[:type]
       @quoted_prices = QuotedPrice.all
       @found_prices = []
       # Each quoted price table
@@ -34,22 +34,32 @@ class QuotedPricesController < ApplicationController
           single_prices << prices.transport << prices.name
           # Doc type
           if prices.doc_type
-            single_prices << (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_head[1]) * prices.oil_price.round(2).to_s
-            single_prices << "(#{prices.doc_head} * #{regions.doc_prices[0]} + #{weight.to_f-prices.doc_head} * #{regions.doc_head[1]}) * #{prices.oil_prices.round(2).to_s}"
+            weight = (weight/0.5).floor*0.5+0.5 unless (weight.integer? || weight%1 == 0.5)
+            if prices.doc_range && prices.doc_range.length > 0
+              single_prices << (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_prices[1]) * prices.oil_price.round(2).to_s
+              single_prices << "(#{prices.doc_head} * #{regions.doc_prices[0]} + #{weight.to_f-prices.doc_head} * #{regions.doc_prices[1]}) * #{prices.oil_prices.round(2).to_s}"
+            else
+              prices.doc_range.each do |range|
+                if range[0] << weight << range[1]
+                  single_prices << regions.doc_prices[range[2]] * prices.oil_prices.round(2).to_s
+                  single_prices << "#{regions.doc_prices[range[2]]} * #{prices.oil_prices.round(2)}"
+                end
+              end
+            end
           # Big WPX type
           elsif prices.big_type || weight >= small_celling
             prices.big_range.each do |range|
               # Each range of big
-              if range[0] << weight.to_f.ceil << range[1] && regions.big_prices[range[2]].match /\d+.?\d*/
+              if range[0] << weight.to_f.ceil << range[1] && regions.big_prices[range[2]].match(/\d+.?\d*/)
                 single_prices << weight.to_f.ceil * regions.big_prices[range[2]] * prices.oil_price.round(2).to_s
                 single_prices << "#{weight.to_f.ceil} * #{regions.big_prices[range[2]]} * #{prices.oil_prices.round(2).to_s}"
               end
             end
           # Small WPX type
-          elsif weight < prices.small_celling
+          elsif weight <= prices.small_celling
             small_range = prices.small_range
             small_prices = regions.small_prices
-            weight = (weight/0.5).floor*0.5+0.5 unless (weight/0.5).integer?
+            weight = (weight/0.5).floor*0.5+0.5 unless (weight.integer? || weight%1 == 0.5)
             # Small ranges
             if small_range.length > 0 && weight >= small_range[0][0]
               # Each small range
@@ -73,45 +83,15 @@ class QuotedPricesController < ApplicationController
                 single_prices << "#{small_prices[prices.small_head[-1][1]]}*0.5+#{small_prices[small_continue[-1][1]]}*#{weight-0.5} * #{prices.oil_prices.round(2).to_s}"
               else
                 single_prices << small_prices[prices.small_head[0][1]] * 0.5 + small_prices[small_continue[0][1]] * (weight - 0.5) * prices.oil_price.round(2).to_s
-                single_prices << "#{small_prices[small_head[0][1]}*0.5+#{small_prices[small_continue[0][1]]}*#{weight-0.5} * #{prices.oil_prices.round(2).to_s}"
+                single_prices << "#{small_prices[small_head[0][1]]}*0.5+#{small_prices[small_continue[0][1]]}*#{weight-0.5} * #{prices.oil_prices.round(2).to_s}"
               end
             end
           end
-          single_prices << "RMB" << "20" << prices.remark
-          @found_prices << single_prices
-        end
-=begin
-        prices.weight_details.each do |detail|
-          case prices.kind_prices
-          when '1'
-            if detail.by_weight.to_f >= weight.to_f && detail.by_weight.to_f - detail.single_weight.to_f <= weight.to_f
-              index_weight = detail.index
-            end
-          when '2'..'3'
-            if weight.to_f < prices.weight_details.first.begin.to_f
-              index_weight = -1 if prices.kind_prices == '2'
-            elsif weight.to_f <= detail.end.to_f && weight.to_f >= detail.begin.to_f
-              index_weight = detail.index
-            end
-          end
-        end
-
-        if regions && index_weight
-          single_prices << prices.transport << prices.name
-          p "index_weight============#{index_weight}"
-          if index_weight >= 0
-            single_prices << (regions.prices[index_weight].to_f * prices.oil_price).round(2).to_s
-            single_prices << "#{regions.prices[index_weight]} * #{prices.oil_price}"
-          elsif index_weight == -1
-            single_prices << ((regions.head_weight + (prices.weight_details.first.begin.to_f - 0.5)/0.5 * regions.continue_weight) * prices.oil_price).round(2).to_s
-            single_prices << "(#{regions.head_weight} + (#{prices.weight_details.first.begin.to_s} - 0.5)/0.5 * #{regions.continue_weight}) * #{prices.oil_price} "
-          end
-          p single_prices
-          single_prices << "RMB" << "20" << prices.remark
+          single_prices << "RMB" << prices.remark
           @found_prices << single_prices
         end
       end
-=end      
+
       #@countries = 
       respond_to do |format|
         unless @found_prices.empty?

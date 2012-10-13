@@ -1,6 +1,6 @@
-h1 创建报价表
+h1 添加报价表
 
-== render 'form'
+= render 'form', :meta => {:url => create_all_admin_quoted_prices_path}
 
-= link_to quoted_prices_path do
+= link_to admin_quoted_prices_path do
   button.ym-button 返回
