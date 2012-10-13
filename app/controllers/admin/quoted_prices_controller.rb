@@ -7,7 +7,7 @@ class Admin::QuotedPricesController < ApplicationController
   # GET /quoted_prices
   # GET /quoted_prices.json
   def index
-    @quoted_prices = QuotedPrice.all
+    @quoted_prices = QuotedPrice.asc(:name).page params[:page]
 
     respond_to do |format|
       format.html # index.html.erb

@@ -9,6 +9,7 @@ gem 'mongoid', '~> 3.0.0'
 gem 'moped'
 gem 'slim-rails'
 gem 'ckeditor', '~> 3.7.2'
+gem 'kaminari'
 
 gem 'thin'
 gem 'spreadsheet', '~> 0.7.3'
