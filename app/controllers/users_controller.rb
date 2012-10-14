@@ -27,11 +27,15 @@ class UsersController < ApplicationController
         flash[:success] = "恭喜，用户创建成功"
         sign_in @user
         format.html { redirect_to @user }
-        format.json { render json: @user, status: :created, location: @user }
+        #format.json { render json: @user, status: :created, location: @user }
       else
-        flash[:error] = "对不起，输入错误，请重新输入"
+        error_msg += @user.errors.messages[:username]*'<br/>' if @user.errors.messages.has_key?(:username)
+        error_msg += '<br/>' + @user.errors.messages[:email]*'<br/>' if @user.errors.messages.has_key?(:email)
+        error_msg += '<br/>密码不能为空，且两次输入的密码必须一致' if @user.errors.messages.has_key?(:password)
+        #@user.errors.messages.push(:password => "密码输入有误") if @user.errors.messages.has_key?(:password_digest)
+        flash[:error] = error_msg
         format.html { render action: "new" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        #format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end

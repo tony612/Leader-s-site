@@ -5,7 +5,7 @@ class Admin::BillsController < ApplicationController
   # GET /bills
   # GET /bills.json
   def index
-    @bills = Bill.all
+    @bills = Bill.page params[:page]
 
     respond_to do |format|
       format.html # index.html.erb

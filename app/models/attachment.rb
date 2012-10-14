@@ -16,7 +16,7 @@ class Attachment
   before_save :set_attachment_attributes
 
   protected
-
+  
   def set_attachment_attributes
     p "Set attachment attributes __________________________"
     p attachment

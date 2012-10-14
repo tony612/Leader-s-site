@@ -35,6 +35,8 @@ table
         td = link_to admin_user_path(user), :confirm => 'Are you sure?', :method => :delete do
           button.ym-button.ym-delete 删除
 
+= paginate @users
+
 br
 
 = link_to new_admin_user_path do

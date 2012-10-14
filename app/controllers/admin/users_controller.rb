@@ -7,7 +7,7 @@ class Admin::UsersController < ApplicationController
   # GET /users.json
   def index
     if current_user.ability 'super'
-      @users = User.all
+      @users = User.asc(:username).page params[:page]
     elsif current_user.ability 'users'
       @users = User.all.nin(admin: true, user_admin: true)
     end

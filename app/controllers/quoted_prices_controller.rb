@@ -6,15 +6,22 @@ class QuotedPricesController < ApplicationController
   skip_before_filter :signed_in_user
 
   def search 
-    if request.get?
-             
-    elsif request.post?
-      country, weight, transport, type = params[:country].strip[3..-1], [params[:weight], params[:volume]].max, params[:transport], params[:type]
+    #if request.get?
+    #elsif request.post?
+    if params[:country] && (params[:weight] || params[:volume] || (params[:length] && params[:height] && params[:width])) && params[:transport] && params[:type]
+      country, weight, transport, type = 
+        params[:country].strip[3..-1], 
+        [params[:weight].to_f, params[:volume].to_f, 
+          (params[:length].to_f*params[:height].to_f*params[:width].to_f)/5000].max, params[:transport], params[:type]
       @quoted_prices = QuotedPrice.all
       @found_prices = []
       weight = weight.to_f
+      p weight
       # Each quoted price table
       QuotedPrice.each do |prices|
+        if transport != "任意" && transport != prices.transport
+          next
+        end
         single_prices = []
         result_price = nil
         result_express = nil
@@ -24,14 +31,13 @@ class QuotedPricesController < ApplicationController
           if region.zone == 0
             if region.countrys_cn.include? country
               regions = region
-              p regions
-              p prices
+              #p regions
+              #p prices
             end
           elsif region.countrys_cn.include? country
-            p "=============================#{country}"
             regions = region
-            p regions
-            p prices
+            #p regions
+            #p prices
           end
         end
         index_weight = nil
@@ -40,7 +46,7 @@ class QuotedPricesController < ApplicationController
           # Doc type
           if type == "DOC"
             if prices.doc_type
-              p "=============================doc type"
+              p "=============================doc type #{prices.name}"
               weight = (weight/0.5).floor*0.5+0.5 unless (weight.integer? || weight%1 == 0.5)
               unless prices.respond_to? :doc_range || prices.doc_range.length > 0
                 result_price = (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_prices[1]) * prices.oil_price.round(2)
@@ -57,17 +63,22 @@ class QuotedPricesController < ApplicationController
           # Big WPX type
 
           elsif weight >= prices.small_celling
-            p "=============================big type"
+            p "=============================big type #{prices.name}"
+            p prices
+            p regions
             if prices.big_range
               prices.big_range.each do |range|
-                p range, weight.ceil, regions.big_prices[range[2]]
+                #p range, weight.ceil, regions.big_prices[range[2]]
                 # Each range of big
-                if range[0] < weight.ceil && weight.ceil < range[1] && regions.big_prices[range[2]]
-                  p weight.ceil, regions.big_prices[range[2]], prices.oil_price.round(2)
-                  result_price = (weight.ceil * regions.big_prices[range[2]] * prices.oil_price.round(2)).to_s
+                #p regions.big_prices[range[2]].to_s
+                #p range[0] < weight.ceil && weight.ceil < range[1] && regions.big_prices[range[2]].to_s.match(/\d+\.?\d*/)
+
+                if range[0] < weight.ceil && weight.ceil < range[1] && regions.big_prices[range[2]].to_s.match(/\d+\.?\d*/)
+                  #p weight.ceil, regions.big_prices[range[2]], prices.oil_price.round(2)
+                  result_price = (weight.ceil * regions.big_prices[range[2]] * prices.oil_price).round(2).to_s
                   result_express = "#{weight.ceil} * #{regions.big_prices[range[2]]} * #{prices.oil_price.round(2).to_s}"
                 end
-                p single_prices
+                #p single_prices
               end
             end
           # Small WPX type
@@ -111,13 +122,14 @@ class QuotedPricesController < ApplicationController
           end
         end
       end
-
+      @found_prices = Kaminari.paginate_array(@found_prices).page(params[:page]).per(10)
       #@countries = 
       respond_to do |format|
         unless @found_prices.empty?
           format.html
           format.js {render :layout => false}
         else
+          @not_found = true
           format.html
           format.js {render :layout => false}
         end

@@ -8,7 +8,6 @@ class Admin::QuotedPricesController < ApplicationController
   # GET /quoted_prices.json
   def index
     @quoted_prices = QuotedPrice.asc(:name).page params[:page]
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @quoted_prices }
@@ -46,6 +45,7 @@ class Admin::QuotedPricesController < ApplicationController
   end
 
   def update_all
+    Attachment.delete_all()
     QuotedPrice.delete_all()
     create_all()
   end

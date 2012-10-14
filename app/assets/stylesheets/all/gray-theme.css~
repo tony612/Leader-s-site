@@ -191,27 +191,27 @@
 	*
 	*/
 
-	.ym-form .field_with_errors label {
+	.ym-form ..field_with_errors label {
 		color:#800;
 		font-weight:normal;
 	}
 
-	.ym-form .field_with_errors input,
-	.ym-form .field_with_errors select,
-	.ym-form .field_with_errors textarea {
+	.ym-form ..field_with_errors input,
+	.ym-form ..field_with_errors select,
+	.ym-form ..field_with_errors textarea {
 		border: 1px #800 solid;
 	}
 
-	.ym-form .field_with_errors input:hover,
-	.ym-form .field_with_errors input:focus,
-	.ym-form .field_with_errors select:hover,
-	.ym-form .field_with_errors select:focus,
-	.ym-form .field_with_errors textarea:hover,
-	.ym-form .field_with_errors textarea:focus {
+	.ym-form ..field_with_errors input:hover,
+	.ym-form ..field_with_errors input:focus,
+	.ym-form ..field_with_errors select:hover,
+	.ym-form ..field_with_errors select:focus,
+	.ym-form ..field_with_errors textarea:hover,
+	.ym-form ..field_with_errors textarea:focus {
 		border: 1px #800 solid !important;
 	}
 
-	.ym-form .field_with_errors .ym-message {
+	.ym-form ..field_with_errors .ym-message {
 		color:#800;
 		font-weight: bold;
 		margin-top: 0;

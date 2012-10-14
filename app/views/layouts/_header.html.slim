@@ -15,12 +15,17 @@ header
         /ul.pull-right
         .pull-right
           - if signed_in?
-            li = link_to admin_bills_path do
-              span 运单
-            li = link_to admin_users_path do
-              span 用户
-            li = link_to admin_quoted_prices_path do
-              span 报价表
+            li = link_to current_user do
+              = current_user.username
+            - if current_user.ability 'bills'
+              li = link_to admin_bills_path do
+                span 运单
+            - if current_user.ability 'users'
+              li = link_to admin_users_path do
+                span 用户
+            - if current_user.ability 'quoted_prices'
+              li = link_to admin_quoted_prices_path do
+                span 报价表
             li = link_to "登出", logout_path, :method => :delete
           - else
             li = link_to login_path do

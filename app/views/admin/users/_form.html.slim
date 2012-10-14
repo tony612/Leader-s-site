@@ -31,7 +31,7 @@
     .ym-fbox-check
       = f.label :bill_admin, "用户管理"
       = f.check_box :user_admin
-  - if @user.ability('admin') || !@user.ability('users')
+  - if current_user.ability('admin') || !@user.ability('users')
     .ym-fbox-check
       = f.label :bills_admin, "运单管理"
       = f.check_box :bills_admin

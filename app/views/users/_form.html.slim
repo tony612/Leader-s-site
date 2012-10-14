@@ -1,4 +1,11 @@
 = form_for @user, :html => {:class => "ym-form ym-full ym-g38"} do |f|
+  
+  /- if @user.errors.any?
+      .box.error
+        h2 = "发生了#{@user.errors.count}个错误:"
+        ul
+        - @user.errors.full_messages.each do |msg|
+          li= msg
 
   .ym-fbox-text
     = f.label :username, "用户名"
