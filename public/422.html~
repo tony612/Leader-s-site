@@ -21,9 +21,6 @@
   <div class="dialog">
     <h1>The change you wanted was rejected.</h1>
     <p>Maybe you tried to change something you didn't have access to.</p>
-    <h1>对不起，您的请求被拒绝.</h1>
-    <p>您可能试图操作一些不在权限的东西。</p>
-<p>如需帮助，请联系我们——深圳利德国际速递有限公司。</p>
   </div>
 </body>
 </html>
