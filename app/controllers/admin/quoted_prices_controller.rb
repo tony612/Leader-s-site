@@ -107,7 +107,7 @@ class Admin::QuotedPricesController < ApplicationController
     if region_way == "row"
       #thead = worksheet.row(region_begin - 1)
       quoted_price.small_celling = thead.at(big_begin).scan(/\d+/)[0]
-      quoted_price[:doc_head], quoted_price[:doc_continue] = thead.at(doc_begin)[/\d+\.?\d*/], thead.at(doc_end)[/\d+\.?\d*/] if !!doc_begin
+      quoted_price[:doc_head], quoted_price[:doc_continue] = thead.at(doc_begin)[/\d+\.?\d*/].to_f, thead.at(doc_end)[/\d+\.?\d*/].to_f if !!doc_begin
       unless quoted_price.big_type
         quoted_price[:small_head] = []
         quoted_price[:small_continue] = []
@@ -141,16 +141,16 @@ class Admin::QuotedPricesController < ApplicationController
           end
         end
       end
-      p quoted_price
+      #p quoted_price
       quoted_price.save()
       (region_begin..region_end).each do |arr_index|
         arr = region_way=='row'? worksheet.row(arr_index) : worksheet.column(arr_index)
-        region_detail = RegionDetail.new(zone: (zone_index && arr[zone_index]) || -1, countrys_cn: (country_index && arr[country_index].split(/[,.\-。，]+/)) || "")
+        region_detail = RegionDetail.new(zone: (zone_index && arr[zone_index]) || -1, countrys_cn: (country_index && arr[country_index].scan(/[\u4e00-\u9fa5]+/)) || "")
         region_detail[:doc_prices], region_detail[:small_prices], region_detail[:big_prices] = [], [], []
         (doc_begin..doc_end).each { |doc_index| region_detail[:doc_prices] << arr.at(doc_index).to_f.round(2)} if doc_begin
         (small_begin..small_end).each {|s_index| region_detail[:small_prices] << arr.at(s_index).to_f.round(2)} if small_begin
         (big_begin..big_end).each {|b_index| region_detail[:big_prices] << arr.at(b_index).to_f.round(2)} if big_begin
-        p region_detail if arr_index == region_begin
+        #p region_detail if arr_index == region_begin
         region_detail.save()
         quoted_price.region_details << region_detail
       end
@@ -163,7 +163,6 @@ class Admin::QuotedPricesController < ApplicationController
         quoted_price[:doc_range] = []
         (doc_begin..doc_end).each do |d_index|
           cell_data = worksheet.row(d_index).at(region_begin-1).to_f
-          #quoted_price.doc_range << [worksheet.cell(d_index, region_begin-1).to_s[/\d+\.?\d*/].to_f - 0.5, worksheet.cell(d_index, region_begin-1).to_s[/\d+\.?\d*/].to_f, d_index - doc_begin]
           quoted_price.doc_range << [cell_data - 0.5, cell_data, d_index - doc_begin]
         end
       end
@@ -192,17 +191,17 @@ class Admin::QuotedPricesController < ApplicationController
 
         end
       end
-      p quoted_price
+      #p quoted_price
       quoted_price.save()
       (region_begin..region_end).each do |arr_index|
         zone_data = worksheet.row(zone_index).at(arr_index) if zone_index
-        country_data = worksheet.row(country_index).at(arr_index).split(/[,.\-。，]+/) if country_index
+        country_data = worksheet.row(country_index).at(arr_index).scan(/[\u4e00-\u9fa5]+/) if country_index
         region_detail = RegionDetail.new(zone: zone_data || -1, countrys_cn: country_data || "")
         region_detail[:doc_prices], region_detail[:small_prices], region_detail[:big_prices] = [], [], []
         (doc_begin..doc_end).each { |d_index| doc_data=worksheet.row(d_index).at(arr_index).round(1);region_detail[:doc_prices] << doc_data} if doc_begin
         (small_begin..small_end).each {|s_index| small_data=worksheet.row(s_index).at(arr_index).round(1);region_detail[:small_prices] << small_data} if small_begin
         (big_begin..big_end).each {|b_index| big_data=worksheet.row(b_index).at(arr_index); big_data=big_data.round(1) if big_data.class!=String;region_detail[:big_prices] << big_data} if big_begin
-        p region_detail if arr_index == region_begin
+        #p region_detail if arr_index == region_begin
         region_detail.save()
         quoted_price.region_details << region_detail
       end

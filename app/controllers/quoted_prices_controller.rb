@@ -42,14 +42,14 @@ class QuotedPricesController < ApplicationController
             if prices.doc_type
               p "=============================doc type"
               weight = (weight/0.5).floor*0.5+0.5 unless (weight.integer? || weight%1 == 0.5)
-              if prices.doc_range && prices.doc_range.length > 0
-                result_price = (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_prices[1]) * prices.oil_price.round(2).to_s
-                result_express = "(#{prices.doc_head} * #{regions.doc_prices[0]} + #{weight.to_f-prices.doc_head} * #{regions.doc_prices[1]}) * #{prices.oil_prices.round(2).to_s}"
+              unless prices.respond_to? :doc_range || prices.doc_range.length > 0
+                result_price = (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_prices[1]) * prices.oil_price.round(2)
+                result_express = "(#{prices.doc_head} * #{regions.doc_prices[0]} + #{weight.to_f-prices.doc_head} * #{regions.doc_prices[1]}) * #{prices.oil_price.round(2)}"
               else
                 prices.doc_range.each do |range|
                   if range[0] < weight && weight < range[1]
-                    result_price = regions.doc_prices[range[2]] * prices.oil_prices.round(2).to_s
-                    result_express = "#{regions.doc_prices[range[2]]} * #{prices.oil_prices.round(2)}"
+                    result_price = regions.doc_prices[range[2]] * prices.oil_price.round(2)
+                    result_express = "#{regions.doc_prices[range[2]]} * #{prices.oil_price.round(2)}"
                   end
                 end
               end
@@ -130,6 +130,25 @@ class QuotedPricesController < ApplicationController
   def show
     @quoted_price = QuotedPrice.find(params[:id])
     @prices_table = []
+    thead = []
+    # Table head
+    thead << "区域" << "国家名称"
+    # Doc
+    [@quoted_price.doc_head].flatten.each{|h| thead << "首重#{h}"} if @quoted_price.respond_to? :doc_head
+    [@quoted_price.doc_continue].flatten.each{|c| thead << "续重#{c}"} if @quoted_price.respond_to? :doc_continue
+    @quoted_price.doc_range.each{|r| thead << "#{r[0]}-#{r[1]}"} if @quoted_price.respond_to? :doc_range
+    @quoted_price.small_head.each{|h| thead << "首重#{h[0]}"} if @quoted_price.respond_to? :small_head
+    @quoted_price.small_continue.each{|c| thead << "续重#{c}"} if @quoted_price.respond_to? :small_continue
+    @quoted_price.small_range.each{|r| thead << "#{r[0]}-#{r[1]}"} if @quoted_price.respond_to? :small_range
+    @quoted_price.big_range.each{|r| thead << "#{r[0]}-#{r[1]}"} if @quoted_price.respond_to? :big_range
+    @prices_table << thead
+    @quoted_price.region_details.each do |region|
+      row = [region.zone==-1? "无":region.zone, region.countrys_cn * ',']
+      row += region.doc_prices if region.respond_to? :doc_prices
+      row += region.small_prices if region.respond_to? :small_prices
+      row += region.big_prices if region.respond_to? :big_prices
+      @prices_table << row
+    end
     
     respond_to do |format|
       format.html # show.html.erb
