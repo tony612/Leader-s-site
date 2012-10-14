@@ -33,7 +33,7 @@ class Admin::BillsController < ApplicationController
   # POST /bills.json
   def create
     @bill = Bill.new(params[:bill])
-
+    
     respond_to do |format|
       if @bill.save
         flash[:success] = "恭喜，运单创建成功"

@@ -1,23 +1,32 @@
-p#notice = notice
+- provide :title, current_user.username
 
-p
-  strong Username:
-  = @user.username
-p
-  strong Name:
-  = @user.name
-p
-  strong Email:
-  = @user.email
-p
-  strong Address:
-  = @user.address
-- if @user.admin || @user.user_admin || @user.bills_admin || @user.news_admin || @user.prices_admin
-  p
-    strong Admin:
-    = @user.admin
-  p
-    strong Bill admin:
-    = @user.bills_admin
+.ym-g20.ym-gl
+  #vcssmenu
+    ul
+      li = link_to "基本信息", user_path(current_user, item: 'base')
 
-/= link_to 'Back', admin_users_path
+      li = link_to "权限信息", user_path(current_user, item: 'ability')
+
+.ym-g80.ym-gr
+  - if !params[:item] || params[:item] == 'base'
+    p
+      strong 用户名:
+      = @user.username
+    p  
+      strong 姓名:
+      = @user.name
+    p
+      strong 邮箱:
+      = @user.email
+    p
+      strong 地址:
+    = @user.address
+  - if params[:item] == 'ability' && (@user.admin || @user.user_admin || @user.bills_admin || @user.news_admin || @user.prices_admin)
+    p
+      strong 超级管理员:
+      = boolean_ch @user.admin
+    p
+      strong 运单管理员:
+      = boolean_ch @user.bills_admin
+
+  /= link_to 'Back', admin_users_path
