@@ -1,0 +1,23 @@
+= form_for @user, :html => {:class => "ym-form ym-full ym-g38"} do |f|
+
+  .ym-fbox-text
+    = f.label :username, "用户名"
+    = f.text_field :username
+  .ym-fbox-text
+    = f.label :name, "姓名"
+    = f.text_field :name
+  .ym-fbox-text
+    = f.label :email, "邮箱"
+    = f.text_field :email
+  .ym-fbox-text
+    = f.label :address, "地址"
+    = f.text_field :address
+  .ym-fbox-text
+    = f.label :password, '密码'
+    = f.password_field :password, size: 40
+  .ym-fbox-text
+    = f.label :password_confirmation, '密码确认'
+    = f.password_field :password_confirmation, size: 40
+
+  .ym-fbox-button
+    = f.submit 'Save'

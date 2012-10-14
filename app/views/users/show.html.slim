@@ -12,11 +12,12 @@ p
 p
   strong Address:
   = @user.address
-p
-  strong Admin:
-  = @user.admin
-p
-  strong Bill admin:
-  = @user.bill_admin
+- if @user.admin || @user.user_admin || @user.bills_admin || @user.news_admin || @user.prices_admin
+  p
+    strong Admin:
+    = @user.admin
+  p
+    strong Bill admin:
+    = @user.bills_admin
 
-= link_to 'Back', admin_users_path
+/= link_to 'Back', admin_users_path

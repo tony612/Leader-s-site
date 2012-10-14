@@ -17,7 +17,7 @@ Leader::Application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  resources :users, :only => [:show]
+  resources :users, :only => [:show, :new, :create]
 
   resources :bills, :only => [:search] do
     collection do
