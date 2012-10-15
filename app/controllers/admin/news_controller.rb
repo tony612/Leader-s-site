@@ -31,7 +31,7 @@ class Admin::NewsController < ApplicationController
         format.html { redirect_to news_index_path(id: @news.id) }
         format.json { render json: @news, status: :created, location: @news }
       else
-        flash[:error] = "对不起，输入有误。请重新输入"
+        flash.now[:error] = "对不起，输入有误。请重新输入"
         format.html { render action: "new" }
         format.json { render json: @news.errors, status: :unprocessable_entity }
       end

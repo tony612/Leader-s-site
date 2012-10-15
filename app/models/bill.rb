@@ -10,4 +10,9 @@ class Bill
   field :local_time, type: DateTime
   field :new_status, type: String
   field :url, type: String
+  field :transport, type: String
+  validates_presence_of :tracking_no
+  validates_presence_of :intl_no
+  validates_presence_of :transport
+  
 end
