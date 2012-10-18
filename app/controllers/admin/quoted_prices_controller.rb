@@ -3,7 +3,8 @@
 require 'spreadsheet'
 
 class Admin::QuotedPricesController < ApplicationController
-  before_filter :verify_ability
+  skip_before_filter :signed_in_user, :only => [:download]
+  before_filter :verify_ability, :except => [:download]
   # GET /quoted_prices
   # GET /quoted_prices.json
   def index
