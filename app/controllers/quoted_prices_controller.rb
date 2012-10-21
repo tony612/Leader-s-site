@@ -83,7 +83,7 @@ class QuotedPricesController < ApplicationController
             end
           # Small WPX type
           elsif weight <= prices.small_celling && !prices.big_type
-            p "=================================small type"
+            p "=================================small type #{prices.name}"
             small_prices = regions.small_prices
             small_range = prices.small_range
             weight = (weight/0.5).floor*0.5+0.5 unless (weight.integer? || weight%1 == 0.5)
@@ -99,8 +99,8 @@ class QuotedPricesController < ApplicationController
                     result_express = "#{regions.small_prices[range[2]]} * #{prices.oil_price.round(2)}"
                   # Price is every price of 0.5
                   else
-                    result_price = small_prices[prices.small_head[0][2]]*0.5 + (weight-0.5)/0.5*small_prices[range[2]] * prices.oil_price.round(2).to_s
-                    result_express = "#{small_prices[prices.small_head[0][2]]}*0.5+(#{weight-0.5}*#{small_prices[range[2]]} * #{prices.oil_prices.round(2).to_s})"
+                    result_price = (small_prices[prices.small_head[0][-1]]*0.5 + (weight-0.5)/0.5*small_prices[range[2]] * prices.oil_price.round(2)).to_s
+                    result_express = "#{small_prices[prices.small_head[0][-1]]}*0.5+(#{weight-0.5}*#{small_prices[range[2]]} * #{prices.oil_price.round(2).to_s})"
                   end
                 end
               end
