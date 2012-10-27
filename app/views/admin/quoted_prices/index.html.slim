@@ -7,6 +7,7 @@ table
     th 报价表名称
     th 运输方式
     th 币种
+    th 油价
     th 生效日期
     th
     th
@@ -16,6 +17,7 @@ table
       td = link_to quoted_price.name, quoted_price
       td = quoted_price.transport
       td = quoted_price.currency
+      td = quoted_price.oil_price
       td = quoted_price.date_active.to_date
       td = link_to edit_admin_quoted_price_path(quoted_price), :method => :get do
         button.ym-button.ym-delete 编辑

@@ -62,7 +62,7 @@ class QuotedPricesController < ApplicationController
             end
           # Big WPX type
 
-          elsif weight >= prices.small_celling
+          elsif prices.small_celling && weight >= prices.small_celling
             p "=============================big type #{prices.name}"
             p prices
             p regions
@@ -82,7 +82,7 @@ class QuotedPricesController < ApplicationController
               end
             end
           # Small WPX type
-          elsif weight <= prices.small_celling && !prices.big_type
+          elsif prices.small_celling && weight <= prices.small_celling && !prices.big_type
             p "=================================small type #{prices.name}"
             small_prices = regions.small_prices
             small_range = prices.small_range

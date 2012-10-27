@@ -99,6 +99,8 @@ class Admin::QuotedPricesController < ApplicationController
     print "Head====", [region_begin, region_end, zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end]
     quoted_price = QuotedPrice.new(params[:quoted_price])
     quoted_price.name, quoted_price.transport, quoted_price.doc_type, quoted_price.big_type = worksheet.name, worksheet.name[/UPS|DHL|Fedex/i] && worksheet.name[/UPS|DHL|Fedex/i].upcase, !!doc_begin, !small_begin
+    quoted_price.transport = "FEDEX" if worksheet.name.match(/(IE|IP)/i)
+    quoted_price.oil_price = worksheet.cell(0, 6).to_s if worksheet.cell(0, 6) && worksheet.cell(0, 6).to_s.match(/\d+\.?\d*/)
     if region_way == "row"
       thead = worksheet.row(region_begin - 1)
     else
@@ -107,7 +109,7 @@ class Admin::QuotedPricesController < ApplicationController
     p "Region way: #{region_way}"
     if region_way == "row"
       #thead = worksheet.row(region_begin - 1)
-      quoted_price.small_celling = thead.at(big_begin).scan(/\d+/)[0]
+      quoted_price.small_celling = thead.at(big_begin).scan(/\d+\.?\d*/)[0]
       quoted_price[:doc_head], quoted_price[:doc_continue] = thead.at(doc_begin)[/\d+\.?\d*/].to_f, thead.at(doc_end)[/\d+\.?\d*/].to_f if !!doc_begin
       unless quoted_price.big_type
         quoted_price[:small_head] = []
@@ -158,7 +160,7 @@ class Admin::QuotedPricesController < ApplicationController
     end
     # When way is col
     if region_way == 'col'
-      quoted_price.small_celling = worksheet.cell(small_end, region_begin-1).to_s.scan(/\d+\.?\d*/)[-1]
+      quoted_price.small_celling = worksheet.cell(small_end, region_begin-1).to_s.scan(/\d+\.?\d*/)[-1] if small_end
       # Has doc type
       if !!doc_begin
         quoted_price[:doc_range] = []
