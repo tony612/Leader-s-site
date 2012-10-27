@@ -35,6 +35,7 @@ class User
     when 'news' then news_admin
     when 'users' then user_admin
     when 'quoted_prices' then prices_admin
+    else false
     end
   end
 

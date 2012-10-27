@@ -94,7 +94,7 @@ class Admin::UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     @user = User.find(params[:id])
-    @user.destroy if !current_user.ability('super') && (@user.ability('super') || @user.alility('users'))
+    @user.destroy if (current_user.ability('super') || current_user.alility('users'))
 
     respond_to do |format|
       format.html { redirect_to admin_users_url }

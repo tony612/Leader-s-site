@@ -2,17 +2,6 @@ header
     = image_tag  "header.jpg", class: 'header'
     #cssmenu
       ul
-        li = link_to root_path do
-          span 首页
-        li = link_to static_pages_products_path do
-          span 产品
-        li = link_to news_index_path do
-          span 新闻中心
-        li = link_to static_pages_about_path do
-          span 关于我们
-        li = link_to search_quoted_prices_path do
-          span 查询价格
-        /ul.pull-right
         .pull-right
           - if signed_in?
             li = link_to current_user do
@@ -32,4 +21,16 @@ header
               span 登录
             li = link_to new_user_path do
               span 注册
+        li = link_to root_path do
+          span 首页
+        li = link_to static_pages_products_path do
+          span 产品
+        li = link_to news_index_path do
+          span 新闻中心
+        li = link_to static_pages_about_path do
+          span 关于我们
+        li = link_to search_quoted_prices_path do
+          span 查询价格
+        /ul.pull-right
+        
 

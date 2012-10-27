@@ -12,7 +12,7 @@
   .ym-fbox-select
     span 请选择正确的运输方式以便生成链接
     = f.label :transport, "运输方式"
-    = f.select 'transport', "<option>UPS</option><option>DHL</option><option>FEDEX</option>".html_safe
+    = f.select 'transport', "<option>UPS</option><option>DHL</option><option>FEDEX</option><option>TNT</option>".html_safe
   .ym-fbox-text
     = f.label :goal, "目的地"
     = f.text_field :goal
@@ -21,7 +21,7 @@
     = f.number_field :number, value: 1
   .ym-fbox-select
     = f.label :local_time, "当地时间"
-    = f.date_select :local_time
+    = f.date_select :local_time, :use_month_names => ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
   .ym-fbox-text
     = f.label :new_status, "最新状态"
     = f.text_field :new_status
