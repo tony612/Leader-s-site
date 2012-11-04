@@ -57,11 +57,20 @@ class Admin::QuotedPricesController < ApplicationController
     p "create all===================================================================="
     Spreadsheet.client_encoding = 'UTF-8'
     tables = Spreadsheet.open "#{Rails.root}/public/uploads/quoted_prices/#{attachment.attachment_filename}"
+    error_sheet = []
     tables.worksheets.each do |worksheet|
-      create_single(worksheet) if worksheet.cell 0, 0
+      begin
+        create_single(worksheet) if worksheet.cell 0, 0
+      rescue
+        error_sheet << worksheet.name
+        p "#{worksheet.name}=======================exception"
+      end
     end
-    
-    flash[:success] == "恭喜，上传成功"
+    if error_sheet.empty?
+      flash[:success] = "恭喜，上传成功"
+    else
+      flash[:warning] = "#{error_sheet * ","}上传错误，请仔细检查报价表信息格式。如果没有错误，请联系管理员。"
+    end
 
     redirect_to admin_quoted_prices_path
   end
@@ -110,7 +119,8 @@ class Admin::QuotedPricesController < ApplicationController
     if region_way == "row"
       #thead = worksheet.row(region_begin - 1)
       quoted_price.small_celling = thead.at(big_begin).scan(/\d+\.?\d*/)[0]
-      quoted_price[:doc_head], quoted_price[:doc_continue] = thead.at(doc_begin)[/\d+\.?\d*/].to_f, thead.at(doc_end)[/\d+\.?\d*/].to_f if !!doc_begin
+      quoted_price[:doc_head] = thead.at(doc_begin)[/\d+\.?\d*/].to_f if !!doc_begin
+      quoted_price[:doc_continue] = thead.at(doc_end)[/\d+\.?\d*/].to_f if !!doc_end
       unless quoted_price.big_type
         quoted_price[:small_head] = []
         quoted_price[:small_continue] = []
@@ -150,6 +160,7 @@ class Admin::QuotedPricesController < ApplicationController
         arr = region_way=='row'? worksheet.row(arr_index) : worksheet.column(arr_index)
         region_detail = RegionDetail.new(zone: (zone_index && arr[zone_index]) || -1, countrys_cn: (country_index && arr[country_index].scan(/[\u4e00-\u9fa5]+/)) || "")
         region_detail[:doc_prices], region_detail[:small_prices], region_detail[:big_prices] = [], [], []
+        doc_end = doc_begin if doc_begin and !doc_end
         (doc_begin..doc_end).each { |doc_index| region_detail[:doc_prices] << arr.at(doc_index).to_f.round(2)} if doc_begin
         (small_begin..small_end).each {|s_index| region_detail[:small_prices] << arr.at(s_index).to_f.round(2)} if small_begin
         (big_begin..big_end).each {|b_index| region_detail[:big_prices] << arr.at(b_index).to_f.round(2)} if big_begin
