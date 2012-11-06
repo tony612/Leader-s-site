@@ -134,9 +134,13 @@ class Admin::QuotedPricesController < ApplicationController
             quoted_price[:small_range] << [s[/\d+\.?\d*/].to_f.round(2), s_celling[/\d+\.?\d*/].to_f.round(2), s_index-small_begin, false]
           elsif s.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
             s_range = s.match /(\d+\.?\d*)[^.\d]+(\d+\.?\d*)/
-            quoted_price[:small_range] << [s_range[1].to_f.round(2), s_range[2].to_f.round(2), s_index-small_begin, true]
+            if s.match '续'
+              quoted_price[:small_range] << [s_range[1].to_f.round(2), s_range[2].to_f.round(2), s_index-small_begin, false]
+            else
+              quoted_price[:small_range] << [s_range[1].to_f.round(2), s_range[2].to_f.round(2), s_index-small_begin, true]
+            end
           elsif s.match '续'
-            quoted_price[:small_continue] << [s[/\d+\.?\d*/].to_f.round(2), s_index-small_begin]
+            quoted_price[:small_continue] << [s[/\d+\.?\d*/].to_f.round(2), s_index-small_begin, false]
           end
         end
       end
