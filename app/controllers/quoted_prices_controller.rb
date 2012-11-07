@@ -49,13 +49,13 @@ class QuotedPricesController < ApplicationController
               p "=============================doc type #{prices.name}"
               weight = (weight/0.5).floor*0.5+0.5 unless (weight.integer? || weight%1 == 0.5)
               unless prices.respond_to? :doc_range || prices.doc_range.length > 0
-                result_price = (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_prices[1]) * prices.oil_price.round(2)
-                result_express = "(#{prices.doc_head} * #{regions.doc_prices[0]} + #{weight.to_f-prices.doc_head} * #{regions.doc_prices[1]}) * #{prices.oil_price.round(2)}"
+                result_price = (prices.doc_head * regions.doc_prices[0] + (weight.to_f - prices.doc_head) * regions.doc_prices[1]) * (prices.oil_price.round(3)).round(2)
+                result_express = "(#{prices.doc_head} * #{regions.doc_prices[0]} + #{weight.to_f-prices.doc_head} * #{regions.doc_prices[1]}) * #{prices.oil_price.round(3)}"
               else
                 prices.doc_range.each do |range|
                   if range[0] < weight && weight < range[1]
-                    result_price = regions.doc_prices[range[2]] * prices.oil_price.round(2)
-                    result_express = "#{regions.doc_prices[range[2]]} * #{prices.oil_price.round(2)}"
+                    result_price = regions.doc_prices[range[2]] * (prices.oil_price.round(3))
+                    result_express = "#{regions.doc_prices[range[2]]} * #{prices.oil_price.round(3)}"
                   end
                 end
               end
@@ -68,15 +68,9 @@ class QuotedPricesController < ApplicationController
             p regions
             if prices.big_range
               prices.big_range.each do |range|
-                #p range, weight.ceil, regions.big_prices[range[2]]
-                # Each range of big
-                #p regions.big_prices[range[2]].to_s
-                #p range[0] < weight.ceil && weight.ceil < range[1] && regions.big_prices[range[2]].to_s.match(/\d+\.?\d*/)
-
                 if range[0] < weight.ceil && weight.ceil < range[1] && regions.big_prices[range[2]].to_s.match(/\d+\.?\d*/)
-                  #p weight.ceil, regions.big_prices[range[2]], prices.oil_price.round(2)
-                  result_price = (weight.ceil * regions.big_prices[range[2]] * prices.oil_price).round(2).to_s
-                  result_express = "#{weight.ceil} * #{regions.big_prices[range[2]]} * #{prices.oil_price.round(2).to_s}"
+                  result_price = (weight.ceil * regions.big_prices[range[2]] * (prices.oil_price.round(3))).round(2).to_s
+                  result_express = "#{weight.ceil} * #{regions.big_prices[range[2]]} * #{prices.oil_price.round(3).to_s}"
                 end
                 #p single_prices
               end
@@ -95,17 +89,11 @@ class QuotedPricesController < ApplicationController
                 if range[0] < weight && weight < range[1]
                   # Price in range is range
                   if range[3]
-                    #if prices.small_head.any?
-                    #  result_price = (small_prices[prices.small_head[0][-1]] * 0.5 + small_prices[range[2]] * (weight-0.5)/0.5) * prices.oil_price.round(2)
-                    #  result_express = "(small_prices[prices.small_head[0][-1]] * 0.5 + small_prices[range[2]] * (weight-0.5)/0.5) * prices.oil_price.round(2) 
-                    #else
-                      result_price = regions.small_prices[range[2]] * prices.oil_price.round(2)
-                      result_express = "#{regions.small_prices[range[2]]} * #{prices.oil_price.round(2)}"
-                    #end
-                  # Price is every price of 0.5
+                    result_price = regions.small_prices[range[2]] * (prices.oil_price.round(3)).round(2)
+                    result_express = "#{regions.small_prices[range[2]]} * #{prices.oil_price.round(3)}"
                   else
-                    result_price = ((small_prices[prices.small_head[0][-1]]*0.5 + (weight-0.5)/0.5*small_prices[range[2]]) * prices.oil_price.round(2)).to_s
-                    result_express = "(#{small_prices[prices.small_head[0][-1]]}*0.5+(#{weight-0.5} / 0.5*#{small_prices[range[2]]})) * #{prices.oil_price.round(2).to_s}"
+                    result_price = ((small_prices[prices.small_head[0][-1]]*1 + (weight-0.5)/0.5*small_prices[range[2]]) * (prices.oil_price.round(3)).round(2)).to_s
+                    result_express = "(#{small_prices[prices.small_head[0][-1]]}*1+#{weight-0.5} / 0.5*#{small_prices[range[2]]}) * #{prices.oil_price.round(3).to_s}"
                   end
                 end
               end
@@ -113,11 +101,11 @@ class QuotedPricesController < ApplicationController
             else
               if prices.small_head.length > 1 && small_prices[prices.small_head[-1][1]] != 0
                 small_continue = prices.small_continue
-                result_price = ((small_prices[prices.small_head[-1][-1]] * 0.5 + small_prices[small_continue[-1][-1]] * (weight - 0.5)/0.5) * prices.oil_price.round(2)).to_s
-                result_express = "(#{small_prices[prices.small_head[-1][-1]]}*0.5+#{small_prices[small_continue[-1][-1]]}*#{weight-0.5} / 0.5) * #{prices.oil_price.round(2).to_s}"
+                result_price = ((small_prices[prices.small_head[-1][-1]] * 1 + small_prices[small_continue[-1][-1]] * (weight - 0.5)/0.5) * (prices.oil_price.round(3)).round(2)).to_s
+                result_express = "(#{small_prices[prices.small_head[-1][-1]]}*1+#{small_prices[small_continue[-1][-1]]}*#{weight-0.5} / 0.5) * #{prices.oil_price.round(3).to_s}"
               else
-                result_price = ((small_prices[prices.small_head[0][1]] * 0.5 + small_prices[prices.small_continue[0][1]] * (weight - 0.5) / 0.5) * prices.oil_price.round(2)).to_s
-                result_express = "(#{small_prices[prices.small_head[0][1]]}*0.5+#{small_prices[prices.small_continue[0][1]]}*#{weight-0.5} / 0.5) * #{prices.oil_price.round(2).to_s}"
+                result_price = ((small_prices[prices.small_head[0][1]] * 1 + small_prices[prices.small_continue[0][1]] * (weight - 0.5) / 0.5) * (prices.oil_price.round(3)).round(2)).to_s
+                result_express = "(#{small_prices[prices.small_head[0][1]]}*1+#{small_prices[prices.small_continue[0][1]]}*#{weight-0.5} / 0.5) * #{prices.oil_price.round(3).to_s}"
               end
             end
           end
