@@ -19,6 +19,9 @@ gem 'carrierwave'
 gem 'mime-types'
 gem "mini_magick"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+
+gem 'pry-rails'
+gem 'pry-debugger'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

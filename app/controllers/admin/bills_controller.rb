@@ -12,7 +12,7 @@ class Admin::BillsController < ApplicationController
       format.json { render json: @bills }
     end
   end
-  
+
   # GET /bills/new
   # GET /bills/new.json
   def new
@@ -32,18 +32,20 @@ class Admin::BillsController < ApplicationController
   # POST /bills
   # POST /bills.json
   def create
-    if params[:bill][:url].strip == ""
-      if params[:bill][:transport] == "DHL"
-        params[:bill][:url] = "http://www.dhl.com.hk/content/hk/sc/express/tracking.shtml?brand=DHL&AWB=#{params[:bill][:tracking_no]}"
-      end
-    end
-    params[:bill][:intl_no] = params[:bill][:intl_no].strip
-    params[:bill][:tracking_no] = params[:bill][:tracking_no].strip
-    @bill = Bill.new(params[:bill])
-    
+    #if params[:bill][:url].strip == ""
+    #  if params[:bill][:transport] == "DHL"
+    #    params[:bill][:url] = "http://www.dhl.com.hk/content/hk/sc/express/tracking.shtml?brand=DHL&AWB=#{params[:bill][:tracking_no]}"
+    #  end
+    #end
+    #params[:bill][:intl_no] = params[:bill][:intl_no].strip
+    #params[:bill][:tracking_no] = params[:bill][:tracking_no].strip
+    result = Bill.build_by_file(params[:bill])
+    @bills = result[:bills]
+    warning = result[:warning]
+
     respond_to do |format|
-      if @bill.save
-        flash[:success] = "恭喜，运单创建成功"
+      if !@bills.blank? and @bills.each(&:save)
+        flash[:success] = "恭喜，运单创建成功  " + warning
         format.html { redirect_to admin_bills_path }
         format.json { render json: @bill, status: :created, location: @bill }
       else
@@ -57,17 +59,17 @@ class Admin::BillsController < ApplicationController
   # PUT /bills/1
   # PUT /bills/1.json
   def update
-    p "============================"
-    p params[:bill][:url]
-    if params[:bill][:url].strip == ""
-      p "================================"
-      if params[:bill][:transport] == "DHL"
-        p "DHL"
-        params[:bill][:url] = "http://www.dhl.com.hk/content/hk/sc/express/tracking.shtml?brand=DHL&AWB=#{params[:bill][:tracking_no]}"
-      end
-    end
-    params[:bill][:intl_no] = params[:bill][:intl_no].strip
-    params[:bill][:tracking_no] = params[:bill][:tracking_no].strip
+    #p "============================"
+    #p params[:bill][:url]
+    #if params[:bill][:url].strip == ""
+    #  p "================================"
+    #  if params[:bill][:transport] == "DHL"
+    #    p "DHL"
+    #    params[:bill][:url] = "http://www.dhl.com.hk/content/hk/sc/express/tracking.shtml?brand=DHL&AWB=#{params[:bill][:tracking_no]}"
+    #  end
+    #end
+    #params[:bill][:intl_no] = params[:bill][:intl_no].strip
+    #params[:bill][:tracking_no] = params[:bill][:tracking_no].strip
     @bill = Bill.find(params[:id])
 
     respond_to do |format|

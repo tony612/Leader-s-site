@@ -4,11 +4,10 @@ class BillsController < ApplicationController
   skip_before_filter :signed_in_user
   # POST /bills
   def search
-
     nos = params[:intl_no].scan(/\d+/)
     p nos
     @bill = Bill.in(intl_no: nos)
-    
+
     respond_to do |format|
       if @bill && @bill.length > 0
         format.html # show.html.erb

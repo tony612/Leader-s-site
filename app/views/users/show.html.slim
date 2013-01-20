@@ -6,13 +6,14 @@
       li = link_to "基本信息", user_path(current_user, item: 'base')
 
       li = link_to "权限信息", user_path(current_user, item: 'ability')
+      li = link_to "运单", bills_user_path(current_user)
 
 .ym-g80.ym-gr
   - if !params[:item] || params[:item] == 'base'
     p
       strong 用户名:
       = @user.username
-    p  
+    p
       strong 姓名:
       = @user.name
     p

@@ -2,6 +2,7 @@
 
 class UsersController < ApplicationController
   skip_before_filter :signed_in_user
+  before_filter :signed_in_user, :only => [:bills]
 
   # GET /users/1
   # GET /users/1.json
@@ -9,7 +10,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     respond_to do |format|
-      format.html 
+      format.html
       format.json { render json: @user }
     end
   end
@@ -17,11 +18,16 @@ class UsersController < ApplicationController
   def new
     @user = User.new
   end
-  
+
+  def bills
+    @user = User.find(params[:id])
+    @bills = @user.bills.page params[:page]
+  end
+
   def create
     params[:user][:admin], params[:user][:user_admin],params[:user][:bills_admin], params[:user][:news_admin], params[:user][:prices_admin] = false, false, false, false, false
     @user = User.new(params[:user])
-  
+
     respond_to do |format|
       if @user.save
         flash[:success] = "恭喜，用户创建成功"
