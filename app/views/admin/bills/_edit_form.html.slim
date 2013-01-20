@@ -1,0 +1,36 @@
+= form_for [:admin, @bill], :html => {:class => "ym-form ym-full ym-g38", :multipart => true} do |f|
+  .ym-fbox-text
+    = f.label :our_no, "我司单号"
+    = f.text_field :our_no
+  .ym-fbox-text
+    = f.label :intl_no, "国际件运单号"
+    = f.text_field :intl_no
+  .ym-fbox-text
+    = f.label :tracking_no, "转单号"
+    = f.text_field :tracking_no
+  .ym-fbox-select
+    span 请选择正确的运输方式以便生成链接
+    = f.label :transport, "运输方式"
+    = f.select 'transport', "<option>UPS</option><option>DHL</option><option>FEDEX</option><option>TNT</option>".html_safe
+  .ym-fbox-text
+    = f.label :goal, "目的地"
+    = f.text_field :goal
+  .ym-fbox-text
+    = f.label :number, "数量"
+    = f.number_field :number, value: 1
+  .ym-fbox-select
+    = f.label :local_time, "当地时间"
+    = f.date_select :local_time, :use_month_names => ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
+  .ym-fbox-text
+    = f.label :new_status, "最新状态"
+    = f.text_field :new_status
+  .ym-fbox-text
+    span 当自动生成链接不可用时，可以手动添加链接，以手动添加的为优先
+    = f.label :url, "官网链接"
+    = f.text_field :url
+  .ym-fbox-text
+    = f.label :user_id, "用户"
+    = f.select :user_id, User.all.map { |u| [u.name, u.id] }, {:prompt => "选择用户"}
+
+  .ym-fbox-button = f.submit "保存"
+
