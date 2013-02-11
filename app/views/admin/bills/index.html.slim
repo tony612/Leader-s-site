@@ -9,7 +9,9 @@ table
     th 转单号
     th 目的地
     th 数量
-    th 当地时间
+    th 出货方式
+    th 时间
+    th 所属用户
     th 最新状态
     th 官网查看
     th
@@ -23,13 +25,15 @@ table
       td = bill.tracking_no
       td = bill.goal
       td = bill.number
-      td = bill.local_time.to_time.to_s(:db) if bill.local_time
+      td = bill.transport
+      td = bill.local_time.to_date.to_s(:db) if bill.local_time
+      td = bill.user.try(:username)
       td = bill.new_status
       td = link_to '前往查看', bill.url, :target => "_blank"
-      td 
+      td
         = link_to edit_admin_bill_path(bill) do
           button.ym-button.ym-edit 编辑
-      td 
+      td
         = link_to admin_bill_path(bill), :confirm => 'Are you sure?', :method => :delete do
           button.ym-button.ym-delete 删除
 = paginate @bills
