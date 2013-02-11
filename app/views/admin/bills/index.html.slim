@@ -9,6 +9,7 @@ table
     th 转单号
     th 目的地
     th 数量
+    th 出货方式
     th 时间
     th 所属用户
     th 最新状态
@@ -24,6 +25,7 @@ table
       td = bill.tracking_no
       td = bill.goal
       td = bill.number
+      td = bill.transport
       td = bill.local_time.to_date.to_s(:db) if bill.local_time
       td = bill.user.try(:username)
       td = bill.new_status

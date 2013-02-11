@@ -46,8 +46,8 @@ class Bill
         number = row.at(4).to_s
         transport = row.at(5)
         username = row.at(6)
+        url = row.at(7)
         user = User.where({:username => username})
-        url = ""
         if transport == "DHL"
           url = "http://www.dhl.com.hk/content/hk/sc/express/tracking.shtml?brand=DHL&AWB=#{tracking_no}"
         end
@@ -55,7 +55,8 @@ class Bill
         if date.class == Date
           fields.merge!({:local_time => date})
         else
-          warning << "时间#{date}格式不对;"
+          fields.merge!({:local_time => Time.now})
+          warning << "时间#{date}格式不对,默认设为当前时间;"
         end
         unless user.blank?
           fields.merge!({:user_id => user[0].id})
