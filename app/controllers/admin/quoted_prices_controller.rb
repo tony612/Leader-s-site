@@ -14,7 +14,7 @@ class Admin::QuotedPricesController < ApplicationController
       format.json { render json: @quoted_prices }
     end
   end
-  
+
   def download
     begin
       send_file "#{Rails.root}/public/uploads/quoted_prices/#{Attachment.last.attachment_filename}"
@@ -40,9 +40,9 @@ class Admin::QuotedPricesController < ApplicationController
   def edit
     @quoted_price = QuotedPrice.find(params[:id])
   end
-  
+
   def edit_all
-    @quoted_price = QuotedPrice.new   
+    @quoted_price = QuotedPrice.new
   end
 
   def update_all
@@ -54,7 +54,7 @@ class Admin::QuotedPricesController < ApplicationController
   def create_all
     params[:quoted_price][:oil_price] = 1 unless params[:quoted_price][:oil_price].strip.match(/^\d+$/)
     attachment = Attachment.create(:attachment => params[:attachment]) if params[:attachment]
-    p "create all===================================================================="
+    #p "create all===================================================================="
     Spreadsheet.client_encoding = 'UTF-8'
     tables = Spreadsheet.open "#{Rails.root}/public/uploads/quoted_prices/#{attachment.attachment_filename}"
     error_sheet = []
@@ -63,7 +63,7 @@ class Admin::QuotedPricesController < ApplicationController
         create_single(worksheet) if worksheet.cell 0, 0
       rescue
         error_sheet << worksheet.name
-        p "#{worksheet.name}=======================exception"
+        #p "#{worksheet.name}=======================exception"
       end
     end
     if error_sheet.empty?
@@ -74,7 +74,7 @@ class Admin::QuotedPricesController < ApplicationController
 
     redirect_to admin_quoted_prices_path
   end
-  
+
   def create_single(worksheet)
     region_begin, region_end = worksheet.cell(0, 0).to_s.split(/\W/)
     zone_index, country_index = worksheet.cell(0, 1), worksheet.cell(0, 2)
@@ -101,10 +101,10 @@ class Admin::QuotedPricesController < ApplicationController
       small_end -= 1 if small_end
       big_begin -= 1 if big_begin
       big_end -= 1 if big_end
-      p "COL==================================+++++++++++++++++++++++++"
-      p [zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end]
+      #p "COL==================================+++++++++++++++++++++++++"
+      #p [zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end]
     end
-    p "Table: #{worksheet.name} =================================================================="
+    #p "Table: #{worksheet.name} =================================================================="
     print "Head====", [region_begin, region_end, zone_index, country_index, doc_begin, doc_end, small_begin, small_end, big_begin, big_end]
     quoted_price = QuotedPrice.new(params[:quoted_price])
     quoted_price.name, quoted_price.transport, quoted_price.doc_type, quoted_price.big_type = worksheet.name, worksheet.name[/UPS|DHL|Fedex/i] && worksheet.name[/UPS|DHL|Fedex/i].upcase, !!doc_begin, !small_begin
@@ -115,7 +115,7 @@ class Admin::QuotedPricesController < ApplicationController
     else
       thead = worksheet.column(region_begin - 1)
     end
-    p "Region way: #{region_way}"
+    #p "Region way: #{region_way}"
     if region_way == "row"
       #thead = worksheet.row(region_begin - 1)
       quoted_price.small_celling = thead.at(big_begin).scan(/\d+\.?\d*/)[0]
@@ -200,7 +200,7 @@ class Admin::QuotedPricesController < ApplicationController
         (big_begin..big_end).each do |b_index|
           big_head = worksheet.cell(b_index, region_begin-1).to_s[/\d+\.?\d*/].to_f
           big_head2 = worksheet.cell(b_index, region_begin-2).to_s[/\d+\.?\d*/].to_f
-          if worksheet.cell(country_index, region_begin-1).to_s.match '终止' 
+          if worksheet.cell(country_index, region_begin-1).to_s.match '终止'
             quoted_price[:big_range] << [big_head2, big_head, b_index - big_begin]
           else
             quoted_price[:big_range] << [big_head, worksheet.cell(b_index+1, region_begin-1).to_s[/\d+\.?\d*/].to_f.floor.to_i, b_index-big_begin] unless b_index == big_end
@@ -225,7 +225,7 @@ class Admin::QuotedPricesController < ApplicationController
       end
 
     end
-    
+
   end
 
   # PUT /quoted_prices/1
@@ -242,7 +242,7 @@ class Admin::QuotedPricesController < ApplicationController
       end
     end
   end
-  
+
   # DELETE /quoted_prices/1
   # DELETE /quoted_prices/1.json
   def destroy
@@ -267,7 +267,7 @@ class Admin::QuotedPricesController < ApplicationController
       time -= 1
     end
     value - 1
-  end 
-  
+  end
+
 
 end

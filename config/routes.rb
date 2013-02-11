@@ -17,7 +17,11 @@ Leader::Application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  resources :users, :only => [:show, :new, :create]
+  resources :users, :only => [:show, :new, :create] do
+    member do
+      get 'bills'
+    end
+  end
 
   resources :bills, :only => [:search] do
     collection do
@@ -30,7 +34,7 @@ Leader::Application.routes.draw do
   get "static_pages/home"
   get "static_pages/products"
   get "static_pages/about"
-  
+
   namespace :admin do
     resources :bills, :except => :show
     resources :news, :except => [:show, :index]
@@ -44,7 +48,7 @@ Leader::Application.routes.draw do
         post 'update_all'
         get 'edit_all'
       end
-       
+
       resources :attachments, :only => [:new, :create, :show], :path => "pricetable"
     end
 
