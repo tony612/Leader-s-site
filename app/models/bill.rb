@@ -40,8 +40,8 @@ class Bill
     tables.worksheets.each do |worksheet|
       worksheet.each 1 do |row|
         date = row.formatted[0]
-        intl_no = row.at(1).to_s
-        tracking_no = row.at(2).to_s
+        intl_no = row.at(1).try(:to_i).to_s
+        tracking_no = row.at(2).try(:to_i).to_s
         goal = row.at(3)
         number = row.at(4).to_s
         transport = row.at(5)
